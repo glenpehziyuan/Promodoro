@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, ToastAndroid } from "react-native";
+import { View, StyleSheet, Text, TextInput, Pressable, ToastAndroid } from "react-native";
 import { useState } from "react";
 import {
     createUserWithEmailAndPassword,
@@ -50,8 +50,8 @@ const LoginScreen = () => {
     }
 
     return (
-        <View>
-            <Text>{"Welcome"}</Text>
+        <View style={styles.container}>
+            <Text style={styles.text}>{"Welcome"}</Text>
             
             <TextInput
                 value={email}
@@ -70,16 +70,34 @@ const LoginScreen = () => {
             <Pressable 
                 onPress={() => setIsLogin(!isLogin)}
             >
-                <Text>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
+                <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
             </Pressable>
 
             <Pressable
                 onPress={() => isLogin ? logInHandler() : signUpHandler()}
             >
-                <Text>{"Proceed"}</Text>
+                <Text style={styles.text}{"Proceed"}</Text>
             </Pressable>
         </View>
     )
 };
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#EBECF0',
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    buttonContainer: {
+        width: '80%'
+    },
+    button: {
+        marginVertical: 8
+    },
+    text: {
+        marginVertical: 10
+    }
+});
 
 export default LoginScreen;
