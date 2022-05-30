@@ -22,14 +22,14 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                ToastAndroid.show('Welcome back, ' + user.email, ToastAndroid.SHORT);
+                ToastAndroid.show(`Welcome back, ${user.email}`, ToastAndroid.SHORT);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                console.log(err.code, err.message);
+                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
             })
     }
 
@@ -38,14 +38,14 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                ToastAndroid.show('Sign up successful for ' + user.email, ToastAndroid.SHORT);
+                ToastAndroid.show(`Sign up successful for, ${user.email}`, ToastAndroid.SHORT);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                console.log(err.code, err.message);
+                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
             })
     }
 
