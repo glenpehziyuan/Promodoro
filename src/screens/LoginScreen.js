@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, ToastAndroid } from "react-native";
+import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image, ToastAndroid } from "react-native";
 import { useState } from "react";
 import {
     createUserWithEmailAndPassword,
@@ -22,14 +22,14 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                console.log('Log in successfully completed for ' + user.email);
+                ToastAndroid.show(`Welcome back, ${user.email}`, ToastAndroid.SHORT);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                console.log(err.code, err.message);
+                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
             })
     }
 
@@ -38,22 +38,32 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                console.log('Sign up successfully completed for ' + user.email);
+                ToastAndroid.show(`Sign up successful for, ${user.email}`, ToastAndroid.SHORT);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                console.log(err.code, err.message);
+                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
             })
     }
 
     return (
-        <View>
-            <Text>{"Welcome"}</Text>
+        <View style={styles.container}>
+            <Image
+                style={styles.tinyLogo}
+                source={
+                    {uri: 'https://www.magpierecruitment.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBM1d6RHc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--be853a5e1c343a05cd60e57b554b8d68fe7a16c8/Productivity%20blog.png' }
+                }
+            />
+
+            <Text style={styles.header}>Welcome!</Text>
+            
+            <Text style={styles.text}>You are currently {isLogin ? "logging in" : "signing up"}</Text>
             
             <TextInput
+                style={styles.textBox}
                 value={email}
                 placeholder="Your email"
                 onChangeText={setEmail}
@@ -61,25 +71,59 @@ const LoginScreen = () => {
             />
             
             <TextInput 
+                style={styles.textBox}
                 value={password}
                 placeholder="Your password"
                 onChangeText={setPassword}
                 secureTextEntry
             />
             
-            <Pressable 
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={() => setIsLogin(!isLogin)}
             >
-                <Text>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
-            </Pressable>
+                <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
+            </TouchableHighlight>
 
-            <Pressable
+            <TouchableHighlight
+                style={styles.buttonContainer}
                 onPress={() => isLogin ? logInHandler() : signUpHandler()}
             >
-                <Text>{"Proceed"}</Text>
-            </Pressable>
+                <Text style={styles.text}>Proceed</Text>
+            </TouchableHighlight>
         </View>
     )
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    textBox:{
+        marginBottom: 10,
+        borderBottomWidth: 1,
+        width: 200
+    },
+    buttonContainer: {
+        backgroundColor: '#dcdcdc',
+        margin: 10,
+        alignItems: 'center',
+        padding: 10
+    },
+    header: {
+        fontWeight: 'bold',
+        fontSize: 20
+    },
+    text: {
+        marginVertical: 10,
+        fontWeight: 'bold'
+    },
+    tinyLogo: {
+        width: 150,
+        height: 150,
+    }
+});
 
 export default LoginScreen;

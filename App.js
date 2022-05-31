@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import LoginScreen from './src/screens/LoginScreen';
 import TimerScreen from './src/screens/TimerScreen';
 
+
 export default function App() {
   return (
     <View style={styles.container}>
