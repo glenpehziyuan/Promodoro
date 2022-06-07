@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image, ToastAndroid } from "react-native";
+import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image, Alert } from "react-native";
 import { useState } from "react";
 import {
     createUserWithEmailAndPassword,
@@ -22,14 +22,14 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                ToastAndroid.show(`Welcome back, ${user.email}`, ToastAndroid.SHORT);
+                Alert.alert("Welcome!", `Welcome back, ${user.email}`);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
+                Alert.alert("Error", `${errCode}, ${errMessage}`);
             })
     }
 
@@ -38,14 +38,14 @@ const LoginScreen = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                ToastAndroid.show(`Sign up successful for, ${user.email}`, ToastAndroid.SHORT);
+                Alert.alert("Success!", `Sign up successful for ${user.email}`);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
                 const errMessage = err.message;
-                ToastAndroid.show(`Error: ${errCode}, ${errMessage}`, ToastAndroid.SHORT);
+                Alert.alert("Error", `${errCode}, ${errMessage}`);
             })
     }
 
