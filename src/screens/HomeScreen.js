@@ -15,8 +15,12 @@ import { signOut } from 'firebase/auth';
 const HomeScreen = () => {
 
     const signOutHandler = () => {
-        signOut(auth).then(() => {
-            Alert.alert("Success!", "Signed out");
+        signOut(auth)
+        .then(() => {
+            Alert.alert("Success!", `${auth.currentUser.email} has signed out`);
+        })
+        .catch((err) => {
+            Alert.alert("Error", `${err}`);
         });
     };
 
