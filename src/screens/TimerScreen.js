@@ -1,84 +1,122 @@
 import react, { useState, useEffect } from 'react';
 import { View, Text, Pressable, TextInput, StyleSheet, ToastAndroid } from 'react-native';
+import { Timer } from '../components';
 
 const SECS_IN_MIN = 60;
 
+const updateObject = ( obj, key, value ) => {
+    const newObj = {...obj};
+    newObj[key] = value;
+    return newObj;
+}    
+
 const TimerScreen = () => {
-    const [timer, setTimer] = useState(null); // keeps track of the interval
-    const [secondsLeft, setSecondsLeft] = useState(0);
+
+    const [isBreak, setIsBreak] = useState(false); // for toggling between work & break timers
+    const [split, setSplit] = useState({
+        work: 0,
+        break: 0
+    });
+    const [secsLeft, setSecsLeft] = useState({
+        work: 0,
+        break: 0
+    });
+    const [timer, setTimer] = useState({
+        work: null,
+        break: null
+    });
 
     // kills the timer / the interval once time ends
     useEffect(() => {
-        timer && secondsLeft === 0 &&
-            clearInterval(timer);
-    }, [secondsLeft, timer]);
+        for (const id of Object.keys(timer)) {
+            if (timer[id] && secsLeft[id] === 0) { 
+                clearInterval(timer[id]);
+            }
+        }
 
-    const configureTime = (mins) => {
-        const secs = parseInt(mins) * SECS_IN_MIN;
-        setSecondsLeft(secs);
-    };
+    }, [secsLeft, timer]);
 
-    const startTimer = () => {
+    // const workTimer = () => {
+    //     return (
+    //         <Timer totalMins={25}/>
+    //     );
+    // };
+
+    // const breakTimer = () => {
+    //     return (
+    //         <Timer totalMins={5}/>
+    //     );
+    // };
+
+    // useEffect(() => {
+    //     setSecondsLeft(totalMins * SECS_IN_MIN)
+    //     startTimer();
+    // }, []);
+
+    // creates a new interval that runs down the specified timer every second
+    const startTimer = (id) => {
+        clearInterval(timer[id])
+
         const intervalID = setInterval(() => {
-            setSecondsLeft((current) => current > 0 ? current - 1 : 0);
-        }, 1000); // run every second
-        setTimer(intervalID);
+            setSecsLeft((secsLeftObj) => {
+                const currValue = secsLeftObj[id];
+                return updateObject(secsLeftObj, id, currValue > 0 ? currValue - 1 : 0);
+            });
+        }, 1000);
+        
+        setTimer((timerObj) => {
+            return updateObject(timerObj, id, intervalID);
+        });
     };
 
-    const pauseTimer = () => {
-        clearInterval(timer);
-        setTimer(null);
+    const proceedHandler = () => {
+
+    }
+
+    const startHandler = (id) => {
+
     };
 
-    const resetTimer = () => {
-        clearInterval(timer);
-        setTimer(null);
-        setSecondsLeft(0);
+    const pauseHandler = (id) => {
+        
     };
 
-    const startHandler = () => {
-        // if a timer is already running, or there is no time set, don't do anything
-        if (timer || secondsLeft === 0) {
-            return;
-        } else {
-            startTimer();
-            ToastAndroid.show("Timer started", ToastAndroid.SHORT);
-        }
-    };
-
-    const pauseHandler = () => {
-        if (timer) {
-            pauseTimer();
-            ToastAndroid.show("Timer paused", ToastAndroid.SHORT);
-        }
-    };
-
-    const resetHandler = () => {
-        resetTimer();
-        ToastAndroid.show("Timer reset. Re-enter minutes", ToastAndroid.SHORT);
-    };
-
-    // converts seconds to min : sec
-    const timeLeft = (seconds) => {
-        const mins = Math.floor(seconds / SECS_IN_MIN);
-        const secs = Math.floor(seconds % SECS_IN_MIN);
-
-        const toDoubleDigits = (num) => {
-            return num < 10 ? `0${num}` : `${num}`;
-        };
-
-        return {
-            mins: toDoubleDigits(mins),
-            secs: toDoubleDigits(secs),
-        };
+    const resetHandler = (id) => {
+        
     };
 
     return (
         <View>
             <TextInput 
-                placeholder='minutes'
-                onChangeText={configureTime}
+                placeholder='Work'
+                onChangeText={(mins) => 
+                    setSplit((splitObj) => {
+                        return updateObject(splitObj, "work", parseInt(mins))
+                    })
+                }
+                keyboardType='numeric'
             />
+
+           <TextInput 
+                placeholder='Break'
+                onChangeText={(mins) => 
+                    setSplit((splitObj) => {
+                        return updateObject(splitObj, "break", parseInt(mins))
+                    })
+                }
+                keyboardType='numeric'
+            />
+
+            <Pressable 
+                style={styles.button}
+                onPress={proceedHandler}
+            >
+                <Text>Proceed to Session</Text>
+            </Pressable>
+
+            <Text>Work: {`${split.work}`}</Text>
+
+            <Text>Break: {`${split.break}`}</Text>
 
             <Pressable 
                 style={styles.button}
@@ -100,8 +138,7 @@ const TimerScreen = () => {
             >
                 <Text>Reset</Text>
             </Pressable>
-
-            <Text>{timeLeft(secondsLeft).mins} minutes {timeLeft(secondsLeft).secs} seconds</Text>
+            
         </View>
     );
 
