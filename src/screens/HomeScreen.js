@@ -3,7 +3,6 @@ import {
     View, 
     Text, 
     TouchableHighlight, 
-    TextInput, 
     StyleSheet, 
     Keyboard, 
     TouchableWithoutFeedback,
@@ -12,12 +11,13 @@ import {
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
 
     const signOutHandler = () => {
+        const userEmail = auth.currentUser.email;
         signOut(auth)
         .then(() => {
-            Alert.alert("Success!", `${auth.currentUser.email} has signed out`);
+            Alert.alert("Success!", `${userEmail} has signed out`);
         })
         .catch((err) => {
             Alert.alert("Error", `${err}`);
@@ -28,14 +28,19 @@ const HomeScreen = () => {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <View style={style.container}>
                 <Text>Hi</Text>
-                <TextInput 
-                    placeholder='hi'
-                />
+                
                 <TouchableHighlight
                     style={style.buttonContainer}
                     onPress={signOutHandler}
                 >
                     <Text>Sign out</Text>
+                </TouchableHighlight>
+                
+                <TouchableHighlight
+                    style={style.buttonContainer}
+                    onPress={() => navigation.navigate("Timer")}
+                >
+                    <Text>Timer</Text>
                 </TouchableHighlight>
             </View>
         </TouchableWithoutFeedback>

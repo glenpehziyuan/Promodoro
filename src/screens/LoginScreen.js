@@ -6,10 +6,12 @@ import {
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    console.log("login");
 
     const resetForm = () => {
         setEmail("");
@@ -18,7 +20,7 @@ const LoginScreen = () => {
     }
     
     const logInHandler = () => {
-        return signInWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
 
@@ -34,7 +36,7 @@ const LoginScreen = () => {
     }
 
     const signUpHandler = () => {
-        return createUserWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
 

@@ -7,10 +7,12 @@ import { TimerScreen } from './src/screens';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <TimerScreen />
-    </View>
+    // <View style={styles.container}>
+    //   <StatusBar style="auto" />
+    //   <AppNavigator />
+    // </View>
+
+    <AppNavigator />
   );
 }
 
