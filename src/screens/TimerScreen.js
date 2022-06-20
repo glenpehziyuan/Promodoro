@@ -10,7 +10,7 @@ const updateObject = ( obj, key, value ) => {
     return newObj;
 }    
 
-const TimerScreen = () => {
+const TimerScreen = ({ navigation }) => {
 
     const [isBreak, setIsBreak] = useState(false); // for toggling between work & break timers
     const [split, setSplit] = useState({
@@ -137,6 +137,13 @@ const TimerScreen = () => {
                 onPress={resetHandler}
             >
                 <Text>Reset</Text>
+            </Pressable>
+
+            <Pressable 
+                style={styles.button}
+                onPress={() => navigation.popToTop()}
+            >
+                <Text>Back to Home</Text>
             </Pressable>
             
         </View>

@@ -10,12 +10,16 @@ import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const MainStack = createNativeStackNavigator();
+const LoginStack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     const [user, setUser] = useState(null); 
 
+    // may need to add a hook to delay rendering until Firebase loads,
+    // as the app always tries to render LoginScreen first when user is null
+
     useEffect(() => {
-        console.log("used effect");
+        //console.log("used effect");
 
         const subscriber = onAuthStateChanged(auth, authUser => {
             if (authUser) {
@@ -27,8 +31,6 @@ const AppNavigator = () => {
 
         return subscriber;
     });
-
-    console.log("render");
 
     const MainNavigator = () => (
         <MainStack.Navigator initialRouteName="Home">
@@ -47,7 +49,7 @@ const AppNavigator = () => {
 
     return (
         <NavigationContainer>
-            { user ? MainNavigator() : LoginScreen() }
+            { user ? <MainNavigator /> : <LoginScreen /> }
         </NavigationContainer>
     );
 };
