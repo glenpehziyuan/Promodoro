@@ -10,7 +10,6 @@ import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 
 const MainStack = createNativeStackNavigator();
-const LoginStack = createNativeStackNavigator();
 
 const AppNavigator = () => {
     const [user, setUser] = useState(null); 
@@ -19,8 +18,6 @@ const AppNavigator = () => {
     // as the app always tries to render LoginScreen first when user is null
 
     useEffect(() => {
-        //console.log("used effect");
-
         const subscriber = onAuthStateChanged(auth, authUser => {
             if (authUser) {
                 setUser(authUser);
