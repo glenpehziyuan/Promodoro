@@ -1,1 +1,1 @@
-export { default as Timer } from './Timer.js';
+export { default as TimeDisplay } from './TimeDisplay.js';

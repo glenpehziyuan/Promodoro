@@ -1,6 +1,6 @@
 import react, { useState, useEffect } from 'react';
-import { View, Text, Pressable, TextInput, StyleSheet, ToastAndroid } from 'react-native';
-import { Timer } from '../components';
+import { View, Text, TouchableHighlight, TextInput, StyleSheet } from 'react-native';
+import { TimeDisplay } from '../components';
 
 const SECS_IN_MIN = 60;
 
@@ -12,50 +12,52 @@ const updateObject = ( obj, key, value ) => {
 
 const TimerScreen = ({ navigation }) => {
 
-    const [isBreak, setIsBreak] = useState(false); // for toggling between work & break timers
+    const [isNewSession, setIsNewSession] = useState(true);
+    
+    // to toggle the timers that the buttons control
+    const [isBreak, setIsBreak] = useState(false); 
+
+    // the user's desired work-break split
     const [split, setSplit] = useState({
         work: 0,
         break: 0
     });
+    
+    // for live tracking of time left in each timer
     const [secsLeft, setSecsLeft] = useState({
         work: 0,
         break: 0
     });
+    
+    // countdown intervals for each timer
     const [timer, setTimer] = useState({
         work: null,
         break: null
     });
 
-    // kills the timer / the interval once time ends
+    // once time ends, kills the timer then prepares it for the next run
     useEffect(() => {
         for (const id of Object.keys(timer)) {
             if (timer[id] && secsLeft[id] === 0) { 
                 clearInterval(timer[id]);
+                resetSecsLeft(id);
+                setIsBreak((isBreak) => !isBreak);
             }
         }
 
     }, [secsLeft, timer]);
 
-    // const workTimer = () => {
-    //     return (
-    //         <Timer totalMins={25}/>
-    //     );
-    // };
-
-    // const breakTimer = () => {
-    //     return (
-    //         <Timer totalMins={5}/>
-    //     );
-    // };
-
-    // useEffect(() => {
-    //     setSecondsLeft(totalMins * SECS_IN_MIN)
-    //     startTimer();
-    // }, []);
+    // starts the next timer after one ends
+    useEffect(() => {
+        if (!isNewSession) {
+            console.log(`new status: ${isBreak ? "break" : "work"}`);
+            startTimer(isBreak ? "break" : "work");
+        }
+    }, [isBreak]);
 
     // creates a new interval that runs down the specified timer every second
     const startTimer = (id) => {
-        clearInterval(timer[id])
+        clearInterval(timer[id]);
 
         const intervalID = setInterval(() => {
             setSecsLeft((secsLeftObj) => {
@@ -69,82 +71,101 @@ const TimerScreen = ({ navigation }) => {
         });
     };
 
+    // resets secsLeft according to the split
+    const resetSecsLeft = (id) => {
+        setSecsLeft((secsLeftObj) => {
+            return updateObject(secsLeftObj, id, split[id]);
+        })
+    };
+
     const proceedHandler = () => {
 
     }
 
-    const startHandler = (id) => {
+    const startHandler = () => {
+        // if this is the first time a timer is started this session,
+        // secsLeft needs to be updated with the work-break split
+        if (isNewSession) {
+            for (const id of Object.keys(secsLeft)) {
+                resetSecsLeft(id);
+            };
+            setIsNewSession(false);
+        };
 
+        startTimer(isBreak ? "break" : "work");
     };
 
-    const pauseHandler = (id) => {
-        
+    const pauseHandler = () => {
+        clearInterval(timer[isBreak ? "break" : "work"]);
     };
 
-    const resetHandler = (id) => {
-        
+    const resetHandler = () => {
+        pauseHandler();
+        resetSecsLeft(isBreak ? "break" : "work");
     };
 
     return (
-        <View>
-            <TextInput 
+        <View style={styles.container}>
+            <TextInput
+                style={styles.textBox} 
                 placeholder='Work'
                 onChangeText={(mins) => 
                     setSplit((splitObj) => {
-                        return updateObject(splitObj, "work", parseInt(mins))
+                        return updateObject(splitObj, "work", parseInt(mins) * SECS_IN_MIN)
                     })
                 }
                 keyboardType='numeric'
             />
 
            <TextInput 
+                style={styles.textBox} 
                 placeholder='Break'
                 onChangeText={(mins) => 
                     setSplit((splitObj) => {
-                        return updateObject(splitObj, "break", parseInt(mins))
+                        return updateObject(splitObj, "break", parseInt(mins) * SECS_IN_MIN)
                     })
                 }
                 keyboardType='numeric'
             />
 
-            <Pressable 
-                style={styles.button}
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={proceedHandler}
             >
                 <Text>Proceed to Session</Text>
-            </Pressable>
+            </TouchableHighlight>
 
-            <Text>Work: {`${split.work}`}</Text>
+            <Text>{`Currently ${isBreak ? "on break!" : "working!"}`}</Text>
 
-            <Text>Break: {`${split.break}`}</Text>
+            <TimeDisplay seconds={isBreak ? secsLeft.break : secsLeft.work}/>
 
-            <Pressable 
-                style={styles.button}
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={startHandler}
             >
                 <Text>Start</Text>
-            </Pressable>
+            </TouchableHighlight>
 
-            <Pressable 
-                style={styles.button}
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={pauseHandler}
             >
                 <Text>Pause</Text>
-            </Pressable>
+            </TouchableHighlight>
 
-            <Pressable 
-                style={styles.button}
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={resetHandler}
             >
                 <Text>Reset</Text>
-            </Pressable>
+            </TouchableHighlight>
 
-            <Pressable 
-                style={styles.button}
+            <TouchableHighlight 
+                style={styles.buttonContainer}
                 onPress={() => navigation.popToTop()}
             >
                 <Text>Back to Home</Text>
-            </Pressable>
+            </TouchableHighlight>
             
         </View>
     );
@@ -152,10 +173,22 @@ const TimerScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    button: {
-        borderWidth: 1,
-        padding: 5,
-    }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    textBox:{
+        marginBottom: 10,
+        borderBottomWidth: 1,
+        width: 50
+    },
+    buttonContainer: {
+        backgroundColor: '#dcdcdc',
+        margin: 10,
+        alignItems: 'center',
+        padding: 10
+    },
 });
 
 export default TimerScreen;

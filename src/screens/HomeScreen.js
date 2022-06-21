@@ -1,4 +1,3 @@
-import react, { useState, useEffect } from 'react';
 import { 
     View, 
     Text, 
@@ -31,16 +30,16 @@ const HomeScreen = ({ navigation }) => {
                 
                 <TouchableHighlight
                     style={style.buttonContainer}
-                    onPress={signOutHandler}
-                >
-                    <Text>Sign out</Text>
-                </TouchableHighlight>
-                
-                <TouchableHighlight
-                    style={style.buttonContainer}
                     onPress={() => navigation.navigate("Timer")}
                 >
                     <Text>Timer</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    style={style.buttonContainer}
+                    onPress={signOutHandler}
+                >
+                    <Text>Sign out</Text>
                 </TouchableHighlight>
             </View>
         </TouchableWithoutFeedback>
