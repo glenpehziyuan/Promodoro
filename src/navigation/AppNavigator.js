@@ -5,7 +5,7 @@ import {
     HomeScreen,
     LoginScreen,
     TimerScreen,
-    ToDoList
+    ToDoListScreen
 } from '../screens';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -43,9 +43,9 @@ const AppNavigator = () => {
                 options={{ title: "Timer" }}
             />
             <MainStack.Screen 
-                name="To-Do List"
-                component={ToDoList}
-                options={{ title: "To-Do List" }}
+                name="ToDoList"
+                component={ToDoListScreen}
+                options={{ title: "ToDoList" }}
             />
         </MainStack.Navigator>
     );
