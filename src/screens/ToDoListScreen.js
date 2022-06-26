@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import { Task } from '../components';
 
-const ToDoListScreen = () => {
+const ToDoListScreen = ({ navigation }) => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
