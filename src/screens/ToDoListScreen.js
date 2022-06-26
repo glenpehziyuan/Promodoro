@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 import { Task } from '../components';
 
-const ToDoList = () => {
+const ToDoListScreen = () => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
 
@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   addText: {},
 });
 
-export default ToDoList;
+export default ToDoListScreen;
