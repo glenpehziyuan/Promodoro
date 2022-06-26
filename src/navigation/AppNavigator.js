@@ -4,7 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     HomeScreen,
     LoginScreen,
-    TimerScreen
+    TimerScreen,
+    ToDoList
 } from '../screens';
 import { auth } from '../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
