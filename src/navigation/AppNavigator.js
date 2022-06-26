@@ -41,6 +41,11 @@ const AppNavigator = () => {
                 component={TimerScreen}
                 options={{ title: "Timer" }}
             />
+            <MainStack.Screen 
+                name="To-Do List"
+                component={ToDoList}
+                options={{ title: "To-Do List" }}
+            />
         </MainStack.Navigator>
     );
 
