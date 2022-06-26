@@ -35,13 +35,12 @@ const HomeScreen = ({ navigation }) => {
                     <Text>Timer</Text>
                 </TouchableHighlight>
                 
-                TouchableHighlight
+                <TouchableHighlight
                     style={style.buttonContainer}
                     onPress={() => navigation.navigate("ToDoList")}
                 >
                     <Text>To-Do List</Text>
                 </TouchableHighlight>
-
 
                 <TouchableHighlight
                     style={style.buttonContainer}
