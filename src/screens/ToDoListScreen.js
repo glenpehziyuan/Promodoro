@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView, TouchableHighlight } from 'react-native';
 import { Task } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
@@ -28,22 +28,22 @@ const ToDoListScreen = ({ navigation }) => {
         keyboardShouldPersistTaps='handled'
       >
 
-      {/* Today's Tasks */}
-      <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Today's tasks</Text>
-        <View style={styles.items}>
-          {/* This is where the tasks will go! */}
-          {
-            taskItems.map((item, index) => {
-              return (
-                <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
-                  <Task text={item} /> 
-                </TouchableOpacity>
-              )
-            })
-          }
+        {/* Today's Tasks */}
+        <View style={styles.tasksWrapper}>
+          <Text style={styles.sectionTitle}>Today's tasks</Text>
+          <View style={styles.items}>
+            {/* This is where the tasks will go! */}
+            {
+              taskItems.map((item, index) => {
+                return (
+                  <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
+                    <Task text={item} /> 
+                  </TouchableOpacity>
+                )
+              })
+            }
+          </View>
         </View>
-      </View>
         
       </ScrollView>
 
@@ -60,6 +60,13 @@ const ToDoListScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+
+      <TouchableHighlight 
+        style={styles.button}
+        onPress={() => navigation.popToTop()}
+      >
+        <Text>Back to Home</Text>
+      </TouchableHighlight>
       
     </View>
   );
@@ -109,6 +116,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   addText: {},
+  button: {
+    backgroundColor: '#dcdcdc',
+    margin: 10,
+    alignItems: 'center',
+    padding: 10
+  }, 
 });
 
 export default ToDoListScreen;
