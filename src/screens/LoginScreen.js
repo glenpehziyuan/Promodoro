@@ -6,7 +6,7 @@ import {
     updateProfile,
 } from 'firebase/auth';
 import { auth } from '../firebase';
-import { LoginComponent, SignUpComponent } from "../components";
+import { CreateNewUser, LoginComponent, SignUpComponent } from "../components";
 
 const LoginScreen = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
         setPassword("");
         setUsername("");
         setIsLogin(true);
-    }
+    };
     
     const logInHandler = () => {
         signInWithEmailAndPassword(auth, email, password)
@@ -43,8 +43,8 @@ const LoginScreen = ({ navigation }) => {
                 };
 
                 Alert.alert("Error", `${errMessage}`);
-            })
-    }
+            });
+    };
 
     const signUpHandler = () => {
         if (username === "") {
@@ -55,9 +55,11 @@ const LoginScreen = ({ navigation }) => {
             .then((userCredential) => {
                 const user = userCredential.user;
 
+                // updates user's username as well as user details on the database
                 updateProfile(user, {
                     displayName: username
                 }).then(() => {
+                    CreateNewUser(user.uid, user.displayName, user.email);
                     Alert.alert("Success!", `Sign up successful for ${user.displayName}`);
                 }).catch((err) => {
                     const errCode = err.code;
@@ -80,8 +82,8 @@ const LoginScreen = ({ navigation }) => {
                 };
 
                 Alert.alert("Error", `${errMessage}`);
-            })
-    }
+            });
+    };
 
     // returns the relevant textboxes depending on whether user wants to login or sign up
     const textBoxes = () => {
@@ -93,7 +95,7 @@ const LoginScreen = ({ navigation }) => {
                     passwordState={password}
                     setPasswordState={setPassword}
                 />
-            )
+            );
         } else {
             return (
                 <SignUpComponent
@@ -104,9 +106,9 @@ const LoginScreen = ({ navigation }) => {
                     nameState={username}
                     setNameState={setUsername}
                 />
-            )
-        }
-    }
+            );
+        };
+    };
 
     return (
         <View style={styles.container}>
