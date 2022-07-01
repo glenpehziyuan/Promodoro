@@ -32,12 +32,25 @@ const LoginScreen = ({ navigation }) => {
             })
             .catch((err) => {
                 const errCode = err.code;
-                const errMessage = err.message;
-                Alert.alert("Error", `${errCode}, ${errMessage}`);
+                let errMessage = "Please check login details.";
+                
+                if (errCode === 'auth/invalid-email') {
+                    errMessage = "Please enter a valid email address.";
+                } else if (errCode === "auth/user-not-found") {
+                    errMessage = "User not found.";
+                } else if (errCode === "auth/wrong-password") {
+                    errMessage = "Wrong password.";
+                };
+
+                Alert.alert("Error", `${errMessage}`);
             })
     }
 
     const signUpHandler = () => {
+        if (username === "") {
+            return Alert.alert("Error", "Please enter a username.");
+        }
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -56,8 +69,17 @@ const LoginScreen = ({ navigation }) => {
             })
             .catch((err) => {
                 const errCode = err.code;
-                const errMessage = err.message;
-                Alert.alert("Error", `${errCode}, ${errMessage}`);
+                let errMessage = "Please check authentication details.";
+
+                if (errCode === "auth/invalid-email") {
+                    errMessage = "Please enter a valid email address.";
+                } else if (errCode === "auth/email-already-in-use") {
+                    errMessage = "Email already in use. Try another email.";
+                } else if (errCode === "auth/weak-password") {
+                    errMessage = "Password too weak. Use at least 6 characters.";
+                };
+
+                Alert.alert("Error", `${errMessage}`);
             })
     }
 
