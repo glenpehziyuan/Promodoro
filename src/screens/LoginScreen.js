@@ -1,53 +1,114 @@
-import { View, StyleSheet, Text, TextInput, TouchableHighlight, Image, Alert } from "react-native";
+import { View, StyleSheet, Text, TouchableHighlight, Image, Alert } from "react-native";
 import { useState } from "react";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    updateProfile,
 } from 'firebase/auth';
 import { auth } from '../firebase';
+import { CreateNewUser, LoginComponent, SignUpComponent } from "../components";
 
 const LoginScreen = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
 
     const resetForm = () => {
         setEmail("");
         setPassword("");
+        setUsername("");
         setIsLogin(true);
-    }
+    };
     
     const logInHandler = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                Alert.alert("Welcome!", `Welcome back, ${user.email}`);
+                Alert.alert("Welcome!", `Welcome back, ${user.displayName}`);
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
-                const errMessage = err.message;
-                Alert.alert("Error", `${errCode}, ${errMessage}`);
-            })
-    }
+                let errMessage = "Please check login details.";
+                
+                if (errCode === 'auth/invalid-email') {
+                    errMessage = "Please enter a valid email address.";
+                } else if (errCode === "auth/user-not-found") {
+                    errMessage = "User not found.";
+                } else if (errCode === "auth/wrong-password") {
+                    errMessage = "Wrong password.";
+                };
+
+                Alert.alert("Error", `${errMessage}`);
+            });
+    };
 
     const signUpHandler = () => {
+        if (username === "") {
+            return Alert.alert("Error", "Please enter a username.");
+        }
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
 
-                Alert.alert("Success!", `Sign up successful for ${user.email}`);
+                // updates user's username as well as user details on the database
+                updateProfile(user, {
+                    displayName: username
+                }).then(() => {
+                    CreateNewUser(user.uid, user.displayName, user.email);
+                    Alert.alert("Success!", `Sign up successful for ${user.displayName}`);
+                }).catch((err) => {
+                    const errCode = err.code;
+                    const errMessage = err.message;
+                    console.log(`${errCode}, ${errMessage}`);
+                })
 
                 resetForm();
             })
             .catch((err) => {
                 const errCode = err.code;
-                const errMessage = err.message;
-                Alert.alert("Error", `${errCode}, ${errMessage}`);
-            })
-    }
+                let errMessage = "Please check authentication details.";
+
+                if (errCode === "auth/invalid-email") {
+                    errMessage = "Please enter a valid email address.";
+                } else if (errCode === "auth/email-already-in-use") {
+                    errMessage = "Email already in use. Try another email.";
+                } else if (errCode === "auth/weak-password") {
+                    errMessage = "Password too weak. Use at least 6 characters.";
+                };
+
+                Alert.alert("Error", `${errMessage}`);
+            });
+    };
+
+    // returns the relevant textboxes depending on whether user wants to login or sign up
+    const textBoxes = () => {
+        if (isLogin) {
+            return (
+                <LoginComponent 
+                    emailState={email}
+                    setEmailState={setEmail}
+                    passwordState={password}
+                    setPasswordState={setPassword}
+                />
+            );
+        } else {
+            return (
+                <SignUpComponent
+                    emailState={email}
+                    setEmailState={setEmail}
+                    passwordState={password}
+                    setPasswordState={setPassword}
+                    nameState={username}
+                    setNameState={setUsername}
+                />
+            );
+        };
+    };
 
     return (
         <View style={styles.container}>
@@ -62,21 +123,7 @@ const LoginScreen = ({ navigation }) => {
             
             <Text style={styles.text}>You are currently {isLogin ? "logging in" : "signing up"}</Text>
             
-            <TextInput
-                style={styles.textBox}
-                value={email}
-                placeholder="Your email"
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-            
-            <TextInput 
-                style={styles.textBox}
-                value={password}
-                placeholder="Your password"
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+            {textBoxes()}
             
             <TouchableHighlight 
                 style={styles.buttonContainer}
@@ -100,11 +147,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    textBox:{
-        marginBottom: 10,
-        borderBottomWidth: 1,
-        width: 200
     },
     buttonContainer: {
         backgroundColor: '#dcdcdc',
