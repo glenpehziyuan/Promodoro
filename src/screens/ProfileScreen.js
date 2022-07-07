@@ -3,49 +3,80 @@ import {
     Text, 
     TouchableHighlight, 
     StyleSheet, 
-    Keyboard, 
-    TouchableWithoutFeedback,
     Image 
 } from 'react-native';
+import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
+import { collection, getDocs } from 'firebase/firestore';
 
 const ProfileScreen = ({ navigation }) => {
+    const [userData, setUserData] = useState({});
+
+    // retrieves user data from database when the screen is rendered
+    useEffect(() => {
+        getUserData()
+            .then((data) => {
+                setUserData(data);
+            })
+            .catch((err) => {
+                console.error("Error getting user data", err);
+            })
+    }, []);
+
+    // retrieves the user's data from the database, based on the uid
+    const getUserData = async () => {
+        try {
+            let output = {};
+            
+            const colRef = collection(db, "users");
+            const colSnap = await getDocs(colRef)
+
+            colSnap.docs.forEach((doc) => {
+                if (doc.data().uid === auth.currentUser.uid) {
+                    output = doc.data();
+                };
+            });
+
+            return output;
+        } catch (err) {
+            console.error("Error getting user data", err);
+        }
+    };
 
     return (
-        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <View style={styles.container}>
-                <Image
-                    style={styles.displayPicture}
-                    source={
-                        {uri: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }
-                    }
-                />
-                
-                <View style={styles.textContainer}>
-                    <View style={styles.textContainerLeft}>
-                        <Text style={styles.text}>Username</Text>
-                        <Text style={styles.text}>Email address</Text>
-                        <Text style={styles.text}>Miles</Text>
-                        <Text style={styles.text}>Backgrounds</Text>
-                        <Text style={styles.text}>Productive time</Text>
-                    </View>
-                    <View style={styles.textContainerRight}>
-                        <Text style={styles.text}>{auth.currentUser.displayName}</Text>
-                        <Text style={styles.text}>{auth.currentUser.email}</Text>
-                        <Text style={styles.text}>Miles</Text>
-                        <Text style={styles.text}>Backgrounds</Text>
-                        <Text style={styles.text}>Productive time</Text>
-                    </View>
+        
+        <View style={styles.container}>
+            <Image
+                style={styles.displayPicture}
+                source={
+                    {uri: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }
+                }
+            />
+            
+            <View style={styles.textContainer}>
+                <View style={styles.textContainerLeft}>
+                    <Text style={styles.text}>Username</Text>
+                    <Text style={styles.text}>Email address</Text>
+                    <Text style={styles.text}>Miles</Text>
+                    <Text style={styles.text}>Backgrounds</Text>
+                    <Text style={styles.text}>Productive time</Text>
                 </View>
+                <View style={styles.textContainerRight}>
+                    <Text style={styles.text}>{userData["username"]}</Text>
+                    <Text style={styles.text}>{userData["email"]}</Text>
+                    <Text style={styles.text}>{userData["miles"]}</Text>
+                    <Text style={styles.text}>{userData["backgrounds"].length}</Text>
+                    <Text style={styles.text}>Productive time</Text>
+                </View>
+            </View>
 
-                <TouchableHighlight 
+            <TouchableHighlight 
                 style={styles.button}
                 onPress={() => navigation.popToTop()}
-                >
-                    <Text>Back to Home</Text>
-                </TouchableHighlight>
-            </View>
-        </TouchableWithoutFeedback>
+            >
+                <Text>Back to Home</Text>
+            </TouchableHighlight>
+        </View>
 
     );
 };
