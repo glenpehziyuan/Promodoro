@@ -65,7 +65,9 @@ const ProfileScreen = ({ navigation }) => {
                     <Text style={styles.text}>{userData["username"]}</Text>
                     <Text style={styles.text}>{userData["email"]}</Text>
                     <Text style={styles.text}>{userData["miles"]}</Text>
-                    <Text style={styles.text}>{userData["backgrounds"].length}</Text>
+                    <Text style={styles.text}>
+                        {userData["backgrounds"] ? userData["backgrounds"].length : 0}
+                    </Text>
                     <Text style={styles.text}>Productive time</Text>
                 </View>
             </View>
