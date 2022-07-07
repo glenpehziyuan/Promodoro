@@ -126,14 +126,14 @@ const LoginScreen = ({ navigation }) => {
             {textBoxes()}
             
             <TouchableHighlight 
-                style={styles.buttonContainer}
+                style={styles.button}
                 onPress={() => setIsLogin(!isLogin)}
             >
                 <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
             </TouchableHighlight>
 
             <TouchableHighlight
-                style={styles.buttonContainer}
+                style={styles.button}
                 onPress={() => isLogin ? logInHandler() : signUpHandler()}
             >
                 <Text style={styles.text}>Proceed</Text>
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    buttonContainer: {
+    button: {
         backgroundColor: '#dcdcdc',
         margin: 10,
         alignItems: 'center',

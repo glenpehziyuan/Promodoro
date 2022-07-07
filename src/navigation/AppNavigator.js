@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     HomeScreen,
     LoginScreen,
+    ProfileScreen,
     TimerScreen,
     ToDoListScreen
 } from '../screens';
@@ -46,6 +47,11 @@ const AppNavigator = () => {
                 name="ToDoList"
                 component={ToDoListScreen}
                 options={{ title: "ToDoList" }}
+            />
+            <MainStack.Screen 
+                name="Profile"
+                component={ProfileScreen}
+                options={{ title: "Profile" }}
             />
         </MainStack.Navigator>
     );
