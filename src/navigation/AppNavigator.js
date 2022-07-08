@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
+    ConfigScreen,
     HomeScreen,
     LoginScreen,
     ProfileScreen,
@@ -42,6 +43,7 @@ const AppNavigator = () => {
                 name="Timer"
                 component={TimerScreen}
                 options={{ title: "Timer" }}
+                initialParams={{ work: 25, break: 5 }}
             />
             <MainStack.Screen 
                 name="ToDoList"
@@ -52,6 +54,11 @@ const AppNavigator = () => {
                 name="Profile"
                 component={ProfileScreen}
                 options={{ title: "Profile" }}
+            />
+            <MainStack.Screen 
+                name="Config"
+                component={ConfigScreen}
+                options={{ title: "Config" }}
             />
         </MainStack.Navigator>
     );
