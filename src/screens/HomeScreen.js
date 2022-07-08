@@ -29,21 +29,28 @@ const HomeScreen = ({ navigation }) => {
                 <Text>Hi</Text>
                 
                 <TouchableHighlight
-                    style={style.buttonContainer}
+                    style={style.button}
                     onPress={() => navigation.navigate("Timer")}
                 >
                     <Text>Timer</Text>
                 </TouchableHighlight>
                 
                 <TouchableHighlight
-                    style={style.buttonContainer}
+                    style={style.button}
                     onPress={() => navigation.navigate("ToDoList")}
                 >
                     <Text>To-Do List</Text>
                 </TouchableHighlight>
 
                 <TouchableHighlight
-                    style={style.buttonContainer}
+                    style={style.button}
+                    onPress={() => navigation.navigate("Profile")}
+                >
+                    <Text>Profile</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    style={style.button}
                     onPress={signOutHandler}
                 >
                     <Text>Sign out</Text>
@@ -61,7 +68,7 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    buttonContainer: {
+    button: {
         backgroundColor: '#dcdcdc',
         margin: 10,
         alignItems: 'center',
