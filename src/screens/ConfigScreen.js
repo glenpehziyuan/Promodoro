@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TouchableHighlight, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { GreyButton } from '../components';
 import { updateObject } from '../utils';
 
 const DEFAULT_WORK_MINS = 25;
@@ -50,19 +51,15 @@ const ConfigScreen = ({ navigation }) => {
                 />
             </View>
 
-            <TouchableHighlight 
-                style={styles.button}
-                onPress={() => proceedHandler()}
-            >
-                <Text>Proceed</Text>
-            </TouchableHighlight>
+            <GreyButton 
+                pressHandler={() => proceedHandler()}
+                title="Proceed"
+            />
 
-            <TouchableHighlight 
-                style={styles.button}
-                onPress={() => navigation.popToTop()}
-            >
-                <Text>Back to Home</Text>
-            </TouchableHighlight>
+            <GreyButton 
+                pressHandler={() => navigation.popToTop()}
+                title="Back to Home"
+            />
         </View>
     );
 

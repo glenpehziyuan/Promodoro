@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView, TouchableHighlight } from 'react-native';
-import { Task } from '../components';
+import { KeyboardAvoidingView, StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
+import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
   const [task, setTask] = useState();
@@ -61,12 +61,10 @@ const ToDoListScreen = ({ navigation }) => {
         </TouchableOpacity>
       </KeyboardAvoidingView>
 
-      <TouchableHighlight 
-        style={styles.button}
-        onPress={() => navigation.popToTop()}
-      >
-        <Text>Back to Home</Text>
-      </TouchableHighlight>
+      <GreyButton 
+        pressHandler={() => navigation.popToTop()}
+        title="Back to Home"
+      />
       
     </View>
   );
@@ -116,12 +114,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   addText: {},
-  button: {
-    backgroundColor: '#dcdcdc',
-    margin: 10,
-    alignItems: 'center',
-    padding: 10
-  }, 
 });
 
 export default ToDoListScreen;

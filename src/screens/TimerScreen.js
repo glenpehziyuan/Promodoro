@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
-import { TimeDisplay } from '../components';
+import { View, Text, StyleSheet } from 'react-native';
+import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
 
 const SECS_IN_MIN = 60;
@@ -116,34 +116,26 @@ const TimerScreen = ({ route, navigation }) => {
             </View>
 
             <View style={styles.buttonContainer}>
-                <TouchableHighlight 
-                    style={styles.button}
-                    onPress={startHandler}
-                >
-                    <Text>Start</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={startHandler}
+                    title="Start"
+                />
 
-                <TouchableHighlight 
-                    style={styles.button}
-                    onPress={pauseHandler}
-                >
-                    <Text>Pause</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={pauseHandler}
+                    title="Pause"
+                />
 
-                <TouchableHighlight 
-                    style={styles.button}
-                    onPress={resetHandler}
-                >
-                    <Text>Reset</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={resetHandler}
+                    title="Reset"
+                />
             </View>
 
-            <TouchableHighlight 
-                style={styles.button}
-                onPress={() => navigation.popToTop()}
-            >
-                <Text>Back to Home</Text>
-            </TouchableHighlight>
+            <GreyButton 
+                pressHandler={() => navigation.popToTop()}
+                title="Back to Home"
+            />
             
         </View>
     );
@@ -155,12 +147,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
-        alignItems: 'center',
-        padding: 10
     },
     buttonContainer: {
         flexDirection: 'row'

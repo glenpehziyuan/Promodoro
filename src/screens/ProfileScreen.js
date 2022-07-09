@@ -1,13 +1,13 @@
 import { 
     View, 
     Text, 
-    TouchableHighlight, 
     StyleSheet, 
     Image 
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import { GreyButton } from '../components';
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState({});
@@ -72,12 +72,10 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
             </View>
 
-            <TouchableHighlight 
-                style={styles.button}
-                onPress={() => navigation.popToTop()}
-            >
-                <Text>Back to Home</Text>
-            </TouchableHighlight>
+            <GreyButton 
+                pressHandler={() => navigation.popToTop()}
+                title="Back to Home"
+            />
         </View>
 
     );
@@ -89,12 +87,6 @@ const styles = StyleSheet.create({
         padding: 50,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
-        alignItems: 'center',
-        padding: 10,
     },
     displayPicture: {
         width: 150,

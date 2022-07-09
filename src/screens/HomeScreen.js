@@ -1,7 +1,6 @@
 import { 
     View, 
     Text, 
-    TouchableHighlight, 
     StyleSheet, 
     Keyboard, 
     TouchableWithoutFeedback,
@@ -9,6 +8,7 @@ import {
 } from 'react-native';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
+import { GreyButton } from '../components';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -28,33 +28,25 @@ const HomeScreen = ({ navigation }) => {
             <View style={style.container}>
                 <Text>Hi</Text>
                 
-                <TouchableHighlight
-                    style={style.button}
-                    onPress={() => navigation.navigate("Config")}
-                >
-                    <Text>Session</Text>
-                </TouchableHighlight>
-                
-                <TouchableHighlight
-                    style={style.button}
-                    onPress={() => navigation.navigate("ToDoList")}
-                >
-                    <Text>To-Do List</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={() => navigation.navigate("Config")}
+                    title="Session"
+                />
 
-                <TouchableHighlight
-                    style={style.button}
-                    onPress={() => navigation.navigate("Profile")}
-                >
-                    <Text>Profile</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={() => navigation.navigate("ToDoList")}
+                    title="To-Do List"
+                />
 
-                <TouchableHighlight
-                    style={style.button}
-                    onPress={signOutHandler}
-                >
-                    <Text>Sign out</Text>
-                </TouchableHighlight>
+                <GreyButton 
+                    pressHandler={() => navigation.navigate("Profile")}
+                    title="Profile"
+                />
+
+                <GreyButton 
+                    pressHandler={signOutHandler}
+                    title="Sign out"
+                />
             </View>
         </TouchableWithoutFeedback>
 
@@ -67,12 +59,6 @@ const style = StyleSheet.create({
         padding: 50,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
-        alignItems: 'center',
-        padding: 10
     },
 });
 
