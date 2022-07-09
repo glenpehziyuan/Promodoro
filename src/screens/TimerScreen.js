@@ -1,27 +1,16 @@
-import react, { useState, useEffect } from 'react';
-import { View, Text, TouchableHighlight, TextInput, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, TouchableHighlight, StyleSheet } from 'react-native';
 import { TimeDisplay } from '../components';
+import { updateObject } from '../utils';
 
 const SECS_IN_MIN = 60;
 
-const updateObject = ( obj, key, value ) => {
-    const newObj = {...obj};
-    newObj[key] = value;
-    return newObj;
-}    
-
-const TimerScreen = ({ navigation }) => {
+const TimerScreen = ({ route, navigation }) => {
 
     const [isNewSession, setIsNewSession] = useState(true);
     
     // to toggle the timers that the buttons control
     const [isBreak, setIsBreak] = useState(false); 
-
-    // the user's desired work-break split
-    const [split, setSplit] = useState({
-        work: 0,
-        break: 0
-    });
     
     // for live tracking of time left in each timer
     const [secsLeft, setSecsLeft] = useState({
@@ -50,10 +39,15 @@ const TimerScreen = ({ navigation }) => {
     // starts the next timer after one ends
     useEffect(() => {
         if (!isNewSession) {
-            console.log(`new status: ${isBreak ? "break" : "work"}`);
             startTimer(isBreak ? "break" : "work");
         }
     }, [isBreak]);
+
+    // the user's desired work-break split
+    const split = {
+        work: route.params["work"] * SECS_IN_MIN,
+        break: route.params["break"] * SECS_IN_MIN
+    }
 
     // creates a new interval that runs down the specified timer every second
     const startTimer = (id) => {
@@ -77,10 +71,6 @@ const TimerScreen = ({ navigation }) => {
             return updateObject(secsLeftObj, id, split[id]);
         })
     };
-
-    const proceedHandler = () => {
-
-    }
 
     const startHandler = () => {
         // if this is the first time a timer is started this session,
@@ -106,36 +96,19 @@ const TimerScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Text>How to use:</Text>
-            <Text style={styles.instructions}>1. Enter the no. of minutes you want to work and break respectively.</Text>
-            <Text style={styles.instructions}>2. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
-            <Text style={styles.instructions}>3. You may pause or reset the timers whenever you like.</Text>
-            <Text style={styles.instructions}>4. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
-
-            <View style={styles.textBoxContainer}>
-                <TextInput
-                    style={styles.textBox} 
-                    placeholder='Work'
-                    onChangeText={(mins) => 
-                        setSplit((splitObj) => {
-                            return updateObject(splitObj, "work", parseInt(mins) * SECS_IN_MIN)
-                        })
-                    }
-                    keyboardType='numeric'
-                />
-
-            <TextInput 
-                    style={styles.textBox} 
-                    placeholder='Break'
-                    onChangeText={(mins) => 
-                        setSplit((splitObj) => {
-                            return updateObject(splitObj, "break", parseInt(mins) * SECS_IN_MIN)
-                        })
-                    }
-                    keyboardType='numeric'
-                />
+            <View style={styles.instructionsContainer}>
+                <Text>How to use:</Text>
+                <Text style={styles.instructions}>1. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
+                <Text style={styles.instructions}>2. You may pause or reset the timers whenever you like.</Text>
+                <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
             </View>
-
+            
+            <View style={styles.intervalContainer}>
+                <Text>
+                    Your Pomodoro interval: {`${route.params["work"]}`} - {`${route.params["break"]}`}
+                </Text>
+            </View>
+            
             <View style={styles.timerContainer}>
                 <Text>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
 
@@ -183,15 +156,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    textBox: {
-        margin: 10,
-        borderBottomWidth: 1,
-        width: 50,
-    },
-    textBoxContainer: {
-        flexDirection: 'row',
-        margin: 20
-    },
     button: {
         backgroundColor: '#dcdcdc',
         margin: 10,
@@ -205,9 +169,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         padding: 5,
     },
+    instructionsContainer: {
+        alignItems: 'center',
+        width: 300
+    },
     timerContainer: {
         flexDirection: 'row',
         margin: 20
+    },
+    intervalContainer: {
+        marginTop: 20,
     },
 });
 
