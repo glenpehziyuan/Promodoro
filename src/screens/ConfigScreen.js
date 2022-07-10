@@ -5,17 +5,21 @@ import { updateObject } from '../utils';
 
 const DEFAULT_WORK_MINS = 25;
 const DEFAULT_BREAK_MINS = 5;
+const DEFAULT_BACKGROUND = "cafe";
 
 const ConfigScreen = ({ navigation }) => {
 
-    // the user's desired work-break split
-    const [split, setSplit] = useState({
-        work: 25,
-        break: 5,
+    // the user's desired work-break split & background
+    const [params, setParams] = useState({
+        work: DEFAULT_WORK_MINS,
+        break: DEFAULT_BREAK_MINS,
+        background: DEFAULT_BACKGROUND
     });
 
+    // functions to select background & verify that user owns it
+
     const proceedHandler = () => {
-        navigation.navigate("Timer", {...split});
+        navigation.navigate("Timer", {...params});
     }
 
     return (
@@ -31,8 +35,8 @@ const ConfigScreen = ({ navigation }) => {
                     style={styles.textBox} 
                     placeholder='Work'
                     onChangeText={(mins) => 
-                        setSplit((splitObj) => {
-                            return updateObject(splitObj, "work", parseInt(mins))
+                        setParams((paramsObj) => {
+                            return updateObject(paramsObj, "work", parseInt(mins))
                         })
                     }
                     keyboardType='numeric'
@@ -42,14 +46,23 @@ const ConfigScreen = ({ navigation }) => {
                     style={styles.textBox} 
                     placeholder='Break'
                     onChangeText={(mins) => 
-                        setSplit((splitObj) => {
-                            return updateObject(splitObj, "break", parseInt(mins))
+                        setParams((paramsObj) => {
+                            return updateObject(paramsObj, "break", parseInt(mins))
                         })
                     }
                     keyboardType='numeric'
                     defaultValue={`${DEFAULT_BREAK_MINS}`}
                 />
             </View>
+
+            <TextInput 
+                style={styles.textBox}
+                onChangeText={(bg) => {
+                    setParams((paramsObj) => {
+                        return updateObject(paramsObj, "background", bg)
+                    })
+                }}
+            />
 
             <GreyButton 
                 pressHandler={() => proceedHandler()}

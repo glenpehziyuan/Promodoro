@@ -1,13 +1,20 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
+import { db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const SECS_IN_MIN = 60;
 
 const TimerScreen = ({ route, navigation }) => {
-
-    const [isNewSession, setIsNewSession] = useState(true);
+    // HOOKS
+    // the user's desired work-break split & background
+    const [configs, setConfigs] = useState({
+        work: 0,
+        break: 0,
+        background: ""
+    });
     
     // to toggle the timers that the buttons control
     const [isBreak, setIsBreak] = useState(false); 
@@ -23,6 +30,28 @@ const TimerScreen = ({ route, navigation }) => {
         work: null,
         break: null
     });
+
+
+    // VARIABLES
+    // tracks whether it is a new session
+    let isNewSession = true;
+
+
+    // reads user configurations for work-break split & retrieves background link from database,
+    // then stores them in an object for easier reference
+    useEffect(() => {
+        getBackground()
+            .then((link) => {
+                setConfigs({
+                    work: route.params["work"],
+                    break: route.params["break"],
+                    background: link
+                })
+            })
+            .catch((err) => {
+                console.error("Error getting background", err)
+            });
+    }, []);
 
     // once time ends, kills the timer then prepares it for the next run
     useEffect(() => {
@@ -43,11 +72,19 @@ const TimerScreen = ({ route, navigation }) => {
         }
     }, [isBreak]);
 
-    // the user's desired work-break split
-    const split = {
-        work: route.params["work"] * SECS_IN_MIN,
-        break: route.params["break"] * SECS_IN_MIN
-    }
+    
+    // HELPER FUNCTIONS USED BY HOOKS & BUTTON HANDLERS
+    // retrieves the background from the database
+    const getBackground = async () => {
+        try {
+            const docRef = doc(db, "backgrounds", route.params.background);
+            const docSnap = await getDoc(docRef);
+
+            return docSnap.data()["link"];
+        } catch (err) {
+            console.error("Error getting background", err);
+        }
+    };
 
     // creates a new interval that runs down the specified timer every second
     const startTimer = (id) => {
@@ -68,10 +105,12 @@ const TimerScreen = ({ route, navigation }) => {
     // resets secsLeft according to the split
     const resetSecsLeft = (id) => {
         setSecsLeft((secsLeftObj) => {
-            return updateObject(secsLeftObj, id, split[id]);
+            return updateObject(secsLeftObj, id, configs[id] * SECS_IN_MIN);
         })
     };
 
+    
+    // BUTTON HANDLERS
     const startHandler = () => {
         // if this is the first time a timer is started this session,
         // secsLeft needs to be updated with the work-break split
@@ -79,7 +118,7 @@ const TimerScreen = ({ route, navigation }) => {
             for (const id of Object.keys(secsLeft)) {
                 resetSecsLeft(id);
             };
-            setIsNewSession(false);
+            isNewSession = false;
         };
 
         startTimer(isBreak ? "break" : "work");
@@ -103,9 +142,16 @@ const TimerScreen = ({ route, navigation }) => {
                 <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
             </View>
             
+            <Image
+                style={styles.background}
+                source={
+                    {uri: configs["background"] }
+                }
+            />
+            
             <View style={styles.intervalContainer}>
                 <Text>
-                    Your Pomodoro interval: {`${route.params["work"]}`} - {`${route.params["break"]}`}
+                    Your Pomodoro interval: {`${configs["work"]}`} - {`${configs["break"]}`}
                 </Text>
             </View>
             
@@ -165,6 +211,10 @@ const styles = StyleSheet.create({
     },
     intervalContainer: {
         marginTop: 20,
+    },
+    background: {
+        width: 300,
+        height: 200,
     },
 });
 
