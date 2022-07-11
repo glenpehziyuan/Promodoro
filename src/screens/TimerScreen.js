@@ -4,6 +4,7 @@ import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { LoadingScreen } from '../screens';
 
 const SECS_IN_MIN = 60;
 
@@ -133,59 +134,65 @@ const TimerScreen = ({ route, navigation }) => {
         resetSecsLeft(isBreak ? "break" : "work");
     };
 
-    return (
-        <View style={styles.container}>
-            <View style={styles.instructionsContainer}>
-                <Text>How to use:</Text>
-                <Text style={styles.instructions}>1. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
-                <Text style={styles.instructions}>2. You may pause or reset the timers whenever you like.</Text>
-                <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
-            </View>
-            
-            <Image
-                style={styles.background}
-                source={
-                    {uri: configs["background"] }
-                }
-            />
-            
-            <View style={styles.intervalContainer}>
-                <Text>
-                    Your Pomodoro interval: {`${configs["work"]}`} - {`${configs["break"]}`}
-                </Text>
-            </View>
-            
-            <View style={styles.timerContainer}>
-                <Text>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
-
-                <TimeDisplay seconds={isBreak ? secsLeft.break : secsLeft.work}/>
-            </View>
-
-            <View style={styles.buttonContainer}>
-                <GreyButton 
-                    pressHandler={startHandler}
-                    title="Start"
+    // if background link has not been loaded, render LoadingScreen instead
+    if (configs["background"] === "") {
+        return (
+            <LoadingScreen />
+        );
+    } else {
+        return (
+            <View style={styles.container}>
+                <View style={styles.instructionsContainer}>
+                    <Text>How to use:</Text>
+                    <Text style={styles.instructions}>1. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
+                    <Text style={styles.instructions}>2. You may pause or reset the timers whenever you like.</Text>
+                    <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
+                </View>
+                
+                <Image
+                    style={styles.background}
+                    source={
+                        {uri: configs["background"] }
+                    }
                 />
-
+                
+                <View style={styles.intervalContainer}>
+                    <Text>
+                        Your Pomodoro interval: {`${configs["work"]}`} - {`${configs["break"]}`}
+                    </Text>
+                </View>
+                
+                <View style={styles.timerContainer}>
+                    <Text>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
+    
+                    <TimeDisplay seconds={isBreak ? secsLeft.break : secsLeft.work}/>
+                </View>
+    
+                <View style={styles.buttonContainer}>
+                    <GreyButton 
+                        pressHandler={startHandler}
+                        title="Start"
+                    />
+    
+                    <GreyButton 
+                        pressHandler={pauseHandler}
+                        title="Pause"
+                    />
+    
+                    <GreyButton 
+                        pressHandler={resetHandler}
+                        title="Reset"
+                    />
+                </View>
+    
                 <GreyButton 
-                    pressHandler={pauseHandler}
-                    title="Pause"
+                    pressHandler={() => navigation.popToTop()}
+                    title="Back to Home"
                 />
-
-                <GreyButton 
-                    pressHandler={resetHandler}
-                    title="Reset"
-                />
+                
             </View>
-
-            <GreyButton 
-                pressHandler={() => navigation.popToTop()}
-                title="Back to Home"
-            />
-            
-        </View>
-    );
-
+        );
+    }; 
 };
 
 const styles = StyleSheet.create({
