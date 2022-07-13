@@ -2,21 +2,12 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
-import { db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { LoadingScreen } from '../screens';
+import { LoadingScreen } from './LoadingScreen';
 
 const SECS_IN_MIN = 60;
 
 const TimerScreen = ({ route, navigation }) => {
-    // HOOKS
-    // the user's desired work-break split & background
-    const [configs, setConfigs] = useState({
-        work: 0,
-        break: 0,
-        background: ""
-    });
-    
+    // HOOKS    
     // to toggle the timers that the buttons control
     const [isBreak, setIsBreak] = useState(false); 
     
@@ -31,28 +22,6 @@ const TimerScreen = ({ route, navigation }) => {
         work: null,
         break: null
     });
-
-
-    // VARIABLES
-    // tracks whether it is a new session
-    let isNewSession = true;
-
-
-    // reads user configurations for work-break split & retrieves background link from database,
-    // then stores them in an object for easier reference
-    useEffect(() => {
-        getBackground()
-            .then((link) => {
-                setConfigs({
-                    work: route.params["work"],
-                    break: route.params["break"],
-                    background: link
-                })
-            })
-            .catch((err) => {
-                console.error("Error getting background", err)
-            });
-    }, []);
 
     // once time ends, kills the timer then prepares it for the next run
     useEffect(() => {
@@ -74,19 +43,19 @@ const TimerScreen = ({ route, navigation }) => {
     }, [isBreak]);
 
     
-    // HELPER FUNCTIONS USED BY HOOKS & BUTTON HANDLERS
-    // retrieves the background from the database
-    const getBackground = async () => {
-        try {
-            const docRef = doc(db, "backgrounds", route.params.background);
-            const docSnap = await getDoc(docRef);
+    // VARIABLES
+    // tracks whether it is a new session
+    let isNewSession = true;
 
-            return docSnap.data()["link"];
-        } catch (err) {
-            console.error("Error getting background", err);
-        }
+    // the user's desired work-break split & background
+    const configs = {
+        work: route.params["work"],
+        break: route.params["break"],
+        background: route.params["background"]
     };
 
+    
+    // HELPER FUNCTIONS USED BY HOOKS & BUTTON HANDLERS
     // creates a new interval that runs down the specified timer every second
     const startTimer = (id) => {
         clearInterval(timer[id]);
