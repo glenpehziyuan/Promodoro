@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { GreyButton, DropdownMenu } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
@@ -7,7 +7,6 @@ import { LoadingScreen } from './LoadingScreen';
 
 const DEFAULT_WORK_MINS = 25;
 const DEFAULT_BREAK_MINS = 5;
-const DEFAULT_BACKGROUND = "cafe";
 
 const ConfigScreen = ({ navigation }) => {
 
@@ -57,7 +56,7 @@ const ConfigScreen = ({ navigation }) => {
             return output;
 
         } catch {(err) => {
-            console.error("Error retrieving user data", err);
+            console.error("Error generating data array", err);
         }}
     };
 
@@ -80,7 +79,7 @@ const ConfigScreen = ({ navigation }) => {
             return output;
 
         } catch {(err) => {
-            console.error("Error retrieving user data", err);
+            console.error("Error retrieving user backgrounds", err);
         }};
     };
 
@@ -93,7 +92,7 @@ const ConfigScreen = ({ navigation }) => {
             return docSnap.data();
 
         } catch (err) {
-            console.error("Error getting background", err);
+            console.error("Error getting background doc", err);
         }
     };
 
@@ -107,6 +106,12 @@ const ConfigScreen = ({ navigation }) => {
     };
     
     const proceedHandler = () => {
+        if (backgroundLink === "") {
+            return Alert.alert("Configurations incomplete", "Please select a background");
+        } else if (workMins <= 0 || breakMins <= 0) {
+            return Alert.alert("Configurations incomplete", "Invalid amount of time chosen");
+        }
+
         const params = paramsToObj();
         navigation.navigate("Timer", {...params});
     };
