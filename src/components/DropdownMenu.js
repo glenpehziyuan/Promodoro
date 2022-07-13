@@ -1,44 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { SelectCountry } from 'react-native-element-dropdown';
 
-const local_data = [
-    {
-        value: 'a',
-        label: 'Country 1',
-        image: {
-            uri: 'https://www.vigcenter.com/public/all/images/default-image.jpg',
-        },
-    },
-    {
-        value: 'b',
-        label: 'Country 2',
-        image: {
-            uri: 'https://www.vigcenter.com/public/all/images/default-image.jpg',
-        },
-    },
-    {
-        value: 'c',
-        label: 'Country 3',
-        image: {
-            uri: 'https://www.vigcenter.com/public/all/images/default-image.jpg',
-        },
-    },
-    {
-        value: 'd',
-        label: 'Country 4',
-        image: {
-            uri: 'https://www.vigcenter.com/public/all/images/default-image.jpg',
-        },
-    },
-    {
-        value: 'e',
-        label: 'Country 5',
-        image: {
-            uri: 'https://www.vigcenter.com/public/all/images/default-image.jpg',
-        },
-    },
-];
-
 const DropdownMenu = ({ dataArray, onChange, placeholder }) => {
 
     return (
