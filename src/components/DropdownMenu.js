@@ -19,6 +19,7 @@ const DropdownMenu = ({ dataArray, onChange, placeholder }) => {
             onChange={(option) => {
                 onChange(option.value);
             }}
+            testID="dropdown-menu"
         />
     );
 };

@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { GreyButton, DropdownMenu } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import { LoadingScreen } from './LoadingScreen';
+import { LoadingScreen } from './index';
 
 const DEFAULT_WORK_MINS = 25;
 const DEFAULT_BREAK_MINS = 5;
