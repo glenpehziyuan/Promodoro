@@ -3,14 +3,17 @@
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
-const CreateNewUser = ( uid, username, email ) => {
+const DEFAULT_BACKGROUNDS = ["cafe", "aurora"];
+
+const createNewUser = ({ uid, username, email }) => {
     addDoc(collection(db, "users"), {
         uid: uid,
         username: username,
         email: email,
         miles: 0,
-        backgrounds: [],
-        rooms: []
+        backgrounds: DEFAULT_BACKGROUNDS,
+        rooms: [],
+        tasks: []
     })
     .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -20,4 +23,4 @@ const CreateNewUser = ( uid, username, email ) => {
     });
 };
 
-export default CreateNewUser;
+export default createNewUser;

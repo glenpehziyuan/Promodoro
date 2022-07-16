@@ -6,7 +6,8 @@ import {
     updateProfile,
 } from 'firebase/auth';
 import { auth } from '../firebase';
-import { CreateNewUser, LoginComponent, SignUpComponent } from "../components";
+import { LoginComponent, SignUpComponent } from '../components';
+import { createNewUser } from '../utils';
 
 const LoginScreen = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -59,7 +60,11 @@ const LoginScreen = ({ navigation }) => {
                 updateProfile(user, {
                     displayName: username
                 }).then(() => {
-                    CreateNewUser(user.uid, user.displayName, user.email);
+                    createNewUser({
+                        uid: user.uid,
+                        username: user.displayName,
+                        email: user.email
+                    });
                     Alert.alert("Success!", `Sign up successful for ${user.displayName}`);
                 }).catch((err) => {
                     const errCode = err.code;
