@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
-import { LoadingScreen } from './LoadingScreen';
+import { LoadingScreen } from './index';
 
 const SECS_IN_MIN = 60;
 
@@ -111,18 +111,19 @@ const TimerScreen = ({ route, navigation }) => {
     } else {
         return (
             <View style={styles.container}>
-                <View style={styles.instructionsContainer}>
+                {/* <View style={styles.instructionsContainer}>
                     <Text>How to use:</Text>
                     <Text style={styles.instructions}>1. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
                     <Text style={styles.instructions}>2. You may pause or reset the timers whenever you like.</Text>
                     <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
-                </View>
+                </View> */}
                 
                 <Image
                     style={styles.background}
                     source={
                         {uri: configs["background"] }
                     }
+                    testID="background-image"
                 />
                 
                 <View style={styles.intervalContainer}>
