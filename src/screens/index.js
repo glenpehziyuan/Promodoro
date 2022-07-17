@@ -5,3 +5,4 @@ export { default as ToDoListScreen } from './ToDoListScreen';
 export { default as ProfileScreen } from './ProfileScreen';
 export { default as ConfigScreen } from './ConfigScreen';
 export { default as LoadingScreen } from './LoadingScreen';
+export { default as SessionScreen } from './SessionScreen';
