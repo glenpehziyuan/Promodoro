@@ -8,6 +8,9 @@ const SECS_IN_MIN = 60;
 
 const TimerScreen = ({ route, navigation }) => {
     // HOOKS    
+    // tracks whether it is a new session
+    const [isNewSession, setIsNewSession] = useState(true);
+
     // to toggle the timers that the buttons control
     const [isBreak, setIsBreak] = useState(false); 
     
@@ -42,11 +45,19 @@ const TimerScreen = ({ route, navigation }) => {
         }
     }, [isBreak]);
 
+    // kills timers on unmount
+    useEffect(() => {
+        const cleanup = () => {
+            for (const id of Object.keys(timer)) {
+                clearInterval(timer[id]);
+            };
+        };
+
+        return cleanup;
+    }, []);
+
     
     // VARIABLES
-    // tracks whether it is a new session
-    let isNewSession = true;
-
     // the user's desired work-break split & background
     const configs = {
         work: route.params["work"],
@@ -88,7 +99,7 @@ const TimerScreen = ({ route, navigation }) => {
             for (const id of Object.keys(secsLeft)) {
                 resetSecsLeft(id);
             };
-            isNewSession = false;
+            setIsNewSession(false);
         };
 
         startTimer(isBreak ? "break" : "work");
