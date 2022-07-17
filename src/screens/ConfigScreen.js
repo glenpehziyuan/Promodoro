@@ -4,6 +4,7 @@ import { GreyButton, DropdownMenu } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { LoadingScreen } from './index';
+import Slider from '@react-native-community/slider';
 
 const DEFAULT_WORK_MINS = 25;
 const DEFAULT_BREAK_MINS = 5;
@@ -125,7 +126,8 @@ const ConfigScreen = ({ navigation }) => {
             <View style={styles.container}>
                 <View style={styles.instructionsContainer}>
                     <Text>How to use:</Text>
-                    <Text style={styles.instructions}>1. Enter the no. of minutes you want to work and break respectively.</Text>
+                    <Text style={styles.instructions}>1. Choose a background.</Text>
+                    <Text style={styles.instructions}>2. Choose the no. of minutes you want to work and break respectively.</Text>
                     <Text style={styles.instructions}>2. Proceed.</Text>
                 </View>
 
@@ -134,21 +136,27 @@ const ConfigScreen = ({ navigation }) => {
                     onChange={setBackgroundLink}
                     placeholder="Select background"
                 />
-    
-                <View style={styles.textBoxContainer}>
-                    <TextInput
-                        style={styles.textBox} 
-                        placeholder='Work'
-                        onChangeText={(mins) => setWorkMins(mins)}
-                        keyboardType='numeric'
-                        defaultValue={`${DEFAULT_WORK_MINS}`}
+
+                <View style={styles.slidersContainer}>
+                    <Text>Work for {workMins} minutes</Text>
+
+                    <Slider 
+                        style={styles.slider}
+                        minimumValue={25}
+                        maximumValue={60}
+                        onValueChange={setWorkMins}
+                        step={5}
+                        testID="slider"
                     />
-                    <TextInput 
-                        style={styles.textBox} 
-                        placeholder='Break'
-                        onChangeText={(mins) => setBreakMins(mins)}
-                        keyboardType='numeric'
-                        defaultValue={`${DEFAULT_BREAK_MINS}`}
+
+                    <Text>Break for {breakMins} minutes</Text>
+
+                    <Slider 
+                        style={styles.slider}
+                        minimumValue={5}
+                        maximumValue={30}
+                        onValueChange={setBreakMins}
+                        step={5}
                     />
                 </View>
     
@@ -172,15 +180,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    textBox: {
-        margin: 10,
-        borderBottomWidth: 1,
-        width: 50,
-    },
-    textBoxContainer: {
-        flexDirection: 'row',
-        margin: 20
-    },
     button: {
         backgroundColor: '#dcdcdc',
         margin: 10,
@@ -197,6 +196,14 @@ const styles = StyleSheet.create({
     instructionsContainer: {
         alignItems: 'center',
         width: 300
+    },
+    slider: {
+        width: 250,
+        height: 40
+    },
+    slidersContainer: {
+        margin: 20,
+        alignItems: 'center'
     },
 });
 
