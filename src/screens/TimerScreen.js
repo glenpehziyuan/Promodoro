@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { TimeDisplay, GreyButton } from '../components';
 import { updateObject } from '../utils';
-import { LoadingScreen } from './index';
+import { LoadingScreen, SessionScreen } from './index';
 
 const SECS_IN_MIN = 60;
 
@@ -65,6 +65,10 @@ const TimerScreen = ({ route, navigation }) => {
         background: route.params["background"]
     };
 
+    // tracks screen orientation
+    const { width, height } = useWindowDimensions();
+    const orientation = width > height ? "landscape" : "portrait";
+
     
     // HELPER FUNCTIONS USED BY HOOKS & BUTTON HANDLERS
     // creates a new interval that runs down the specified timer every second
@@ -119,6 +123,10 @@ const TimerScreen = ({ route, navigation }) => {
         return (
             <LoadingScreen />
         );
+    } else if (orientation === "landscape") {
+        return (
+            <SessionScreen />
+        )
     } else {
         return (
             <View style={styles.container}>
