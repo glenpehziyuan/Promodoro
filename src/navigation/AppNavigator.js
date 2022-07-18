@@ -33,7 +33,10 @@ const AppNavigator = () => {
     });
 
     const MainNavigator = () => (
-        <MainStack.Navigator initialRouteName="Home">
+        <MainStack.Navigator 
+            initialRouteName="Home" 
+            screenOptions={{headerShown: false}}
+        >
             <MainStack.Screen 
                 name="Home"
                 component={HomeScreen}
