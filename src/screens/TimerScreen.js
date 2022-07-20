@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
-import { TimeDisplay, GreyButton } from '../components';
+import { TimeDisplay, GreyButton, LandscapeTimer } from '../components';
 import { updateObject } from '../utils';
-import { LoadingScreen, SessionScreen } from './index';
+import { LoadingScreen } from './index';
 
 const SECS_IN_MIN = 60;
 
@@ -125,17 +125,18 @@ const TimerScreen = ({ route, navigation }) => {
         );
     } else if (orientation === "landscape") {
         return (
-            <SessionScreen />
+            <LandscapeTimer 
+                isBreak={isBreak}
+                secsLeft={secsLeft}
+                startHandler={startHandler}
+                pauseHandler={pauseHandler}
+                resetHandler={resetHandler}
+                background={configs["background"]}
+            />
         )
     } else {
         return (
             <View style={styles.container}>
-                {/* <View style={styles.instructionsContainer}>
-                    <Text>How to use:</Text>
-                    <Text style={styles.instructions}>1. Start the timer. The work timer will run first, and is immediately followed by the break timer.</Text>
-                    <Text style={styles.instructions}>2. You may pause or reset the timers whenever you like.</Text>
-                    <Text style={styles.instructions}>3. To change the no. of minutes, simply re-enter the new minutes, press Reset, and continue from Step 2.</Text>
-                </View> */}
                 
                 <Image
                     style={styles.background}
@@ -203,7 +204,8 @@ const styles = StyleSheet.create({
     },
     timerContainer: {
         flexDirection: 'row',
-        margin: 20
+        margin: 20,
+        alignItems: 'center'
     },
     intervalContainer: {
         marginTop: 20,
