@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
-import { TimeDisplay, GreyButton } from './index';
+import { TimeDisplay } from './TimeDisplay';
+import { GreyButton } from './GreyButton';
 
 const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHandler, background }) => {
 

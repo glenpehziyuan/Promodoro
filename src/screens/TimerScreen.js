@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
 import { TimeDisplay, GreyButton, LandscapeTimer } from '../components';
 import { updateObject } from '../utils';
-import { LoadingScreen } from './index';
+import { LoadingScreen } from './LoadingScreen';
 
 const SECS_IN_MIN = 60;
 
