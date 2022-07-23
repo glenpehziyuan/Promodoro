@@ -6,8 +6,8 @@ const GreyButton = ({ pressHandler, title }) => {
             style={styles.button}
             onPress={pressHandler}
         >
-        <Text>{title}</Text>
-      </TouchableHighlight>
+            <Text>{title}</Text>
+        </TouchableHighlight>
     );
 };
 
