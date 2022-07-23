@@ -17,7 +17,7 @@ const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHa
             >    
                 <View style={styles.subContainer}>                  
                     <View style={styles.timerContainer}>
-                        <Text style={styles.text}>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
+                        <Text style={styles.text}>{`${isBreak ? "Break: " : "Work: "}`}</Text>
         
                         <TimeDisplay seconds={isBreak ? secsLeft["break"] : secsLeft["work"]}/>
                     </View>

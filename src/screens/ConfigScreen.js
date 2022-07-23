@@ -223,8 +223,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },  
     instructions:{
-        fontSize: 12,
-        padding: 5,
+        fontSize: 11,
+        margin: 5,
     },
     instructionsContainer: {
         flex: 1,

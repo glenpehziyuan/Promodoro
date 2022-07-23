@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FEFFE1'
     },
     buttonContainer: {
         flexDirection: 'row'
@@ -200,7 +201,10 @@ const styles = StyleSheet.create({
     },
     instructionsContainer: {
         alignItems: 'center',
-        width: 300
+        width: 300,
+        backgroundColor: '#E3FFFB',
+        borderWidth: 2,
+        borderColor: "#D2E0F2"
     },
     timerContainer: {
         flexDirection: 'row',

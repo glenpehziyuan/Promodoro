@@ -22,7 +22,10 @@ const styles = StyleSheet.create({
     display: {
         fontSize: 24,
         fontWeight: 'bold',
-        backgroundColor: 'coral'
+        backgroundColor: 'black',
+        color: 'white',
+        paddingVertical: 5,
+        paddingHorizontal: 10
     },
 })
 
