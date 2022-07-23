@@ -10,6 +10,7 @@ import {
   ScrollView, 
   Platform 
 } from 'react-native';
+import { db } from '../firebase';
 import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
