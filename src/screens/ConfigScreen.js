@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { GreyButton, DropdownMenu } from '../components';
+import { View, Text, StyleSheet, Alert, Image } from 'react-native';
+import { GreyButton, DropdownMenu, ColouredButton, Placeholder } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import LoadingScreen from './LoadingScreen';
@@ -117,6 +117,29 @@ const ConfigScreen = ({ navigation }) => {
         navigation.navigate("Timer", {...params});
     };
 
+    // changes between placeholder and selected background image
+    const display = () => {
+        if (backgroundLink === "") {
+            return (
+                <Placeholder 
+                    width={300}
+                    height={200}
+                    placeholderText="No background selected"
+                />
+            )
+        } else {
+            return (
+                <Image 
+                style={styles.image}    
+                source={
+                        {uri: backgroundLink}
+                    }
+                />
+            )
+        }
+    }
+
+
     if (dropdownData === []) {
         return (
             <LoadingScreen />
@@ -125,13 +148,15 @@ const ConfigScreen = ({ navigation }) => {
         return (
             <View style={styles.container}>
                 <View style={styles.instructionsContainer}>
-                    <Text style={{textAlign: 'center'}}>How to use:</Text>
-                    <Text style={styles.instructions}>1. Choose a background.</Text>
-                    <Text style={styles.instructions}>2. Choose the no. of minutes you want to work and break respectively.</Text>
-                    <Text style={styles.instructions}>2. Proceed.</Text>
+                    <Text style={styles.title}>How to use:</Text>
+                    <Text style={styles.instructions}>
+                        Choose a background, as well as the no. of minutes you want to work and break respectively.
+                    </Text>
                 </View>
 
                 <View style={styles.dropdownContainer}>
+                    {display()}
+                    
                     <DropdownMenu 
                         dataArray={dropdownData}
                         onChange={setBackgroundLink}
@@ -163,14 +188,16 @@ const ConfigScreen = ({ navigation }) => {
                 </View>
     
                 <View style={styles.buttonContainer}>
-                    <GreyButton 
+                    <ColouredButton 
                         pressHandler={() => proceedHandler()}
                         title="Proceed"
+                        colour="#D6FFD9"
                     />
         
-                    <GreyButton 
+                    <ColouredButton 
                         pressHandler={() => navigation.popToTop()}
                         title="Back to Home"
+                        colour="#DCDCDC"
                     />
                 </View>
             </View>
@@ -183,18 +210,18 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FEFFE1'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
-        alignItems: 'center',
-        padding: 10
+        backgroundColor: '#FEFFE1',
+        paddingTop: 50
     },
     buttonContainer: {
         flex: 2,
-        justifyContent: 'center'
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
+    title: {
+        marginBottom: 5,
+        alignSelf: 'center'
+    },  
     instructions:{
         fontSize: 12,
         padding: 5,
@@ -206,21 +233,29 @@ const styles = StyleSheet.create({
         width: '90%',
         backgroundColor: '#E3FFFB',
         padding: 20,
-        margin: 20
+        marginBottom: 30,
+        borderWidth: 2,
+        borderColor: "#D2E0F2"
     },
     slider: {
-        width: 250,
-        height: 40
+        width: 300,
+        height: 40,
     },
     slidersContainer: {
         flex: 2,
         margin: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     dropdownContainer: {
-        flex: 2,
-        justifyContent: 'center'
+        flex: 4,
+        justifyContent: 'space-evenly',
+        alignItems: 'center'
     },
+    image: {
+        height: 200,
+        width: 300,
+    }
 });
 
 export default ConfigScreen;
