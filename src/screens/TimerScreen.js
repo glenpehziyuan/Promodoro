@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, useWindowDimensions } from 'react-native';
-import { TimeDisplay, GreyButton, LandscapeTimer } from '../components';
+import { TimeDisplay, GreyButton, LandscapeTimer, ColouredButton } from '../components';
 import { updateObject } from '../utils';
 import LoadingScreen from './LoadingScreen';
 
@@ -146,12 +146,6 @@ const TimerScreen = ({ route, navigation }) => {
                     testID="background-image"
                 />
                 
-                <View style={styles.intervalContainer}>
-                    <Text>
-                        Your Pomodoro interval: {`${configs["work"]}`} - {`${configs["break"]}`}
-                    </Text>
-                </View>
-                
                 <View style={styles.timerContainer}>
                     <Text>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
     
@@ -159,17 +153,18 @@ const TimerScreen = ({ route, navigation }) => {
                 </View>
     
                 <View style={styles.buttonContainer}>
-                    <GreyButton 
+                    <ColouredButton 
                         pressHandler={startHandler}
                         title="Start"
+                        colour="#D6FFD9"
                     />
     
-                    <GreyButton 
+                    <ColouredButton 
                         pressHandler={pauseHandler}
                         title="Pause"
                     />
     
-                    <GreyButton 
+                    <ColouredButton 
                         pressHandler={resetHandler}
                         title="Reset"
                     />
@@ -190,31 +185,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FEFFE1'
+        backgroundColor: '#FEFFE1',
+        paddingTop: 50
     },
     buttonContainer: {
+        flex: 1,
         flexDirection: 'row'
     },
-    instructions:{
-        fontSize: 12,
-        padding: 5,
-    },
-    instructionsContainer: {
-        alignItems: 'center',
-        width: 300,
-        backgroundColor: '#E3FFFB',
-        borderWidth: 2,
-        borderColor: "#D2E0F2"
-    },
     timerContainer: {
+        flex: 2,
         flexDirection: 'row',
         margin: 20,
         alignItems: 'center'
     },
-    intervalContainer: {
-        marginTop: 20,
-    },
     background: {
+        flex: 3,
         width: 300,
         height: 200,
     },

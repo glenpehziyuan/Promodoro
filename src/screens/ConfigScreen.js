@@ -122,8 +122,8 @@ const ConfigScreen = ({ navigation }) => {
         if (backgroundLink === "") {
             return (
                 <Placeholder 
-                    width={300}
-                    height={200}
+                    width="80%"
+                    height="60%"
                     placeholderText="No background selected"
                 />
             )
@@ -220,25 +220,25 @@ const styles = StyleSheet.create({
     },
     title: {
         marginBottom: 5,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        fontStyle: 'italic'
     },  
     instructions:{
-        fontSize: 11,
-        margin: 5,
+        fontSize: 12,
+        textAlign: 'justify'
     },
     instructionsContainer: {
         flex: 1,
-        alignContent: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'space-evenly',
         width: '90%',
         backgroundColor: '#E3FFFB',
         padding: 20,
         marginBottom: 30,
         borderWidth: 2,
-        borderColor: "#D2E0F2"
+        borderColor: '#D2E0F2',
     },
     slider: {
-        width: 300,
+        width: '70%',
         height: 40,
     },
     slidersContainer: {
@@ -246,11 +246,13 @@ const styles = StyleSheet.create({
         margin: 20,
         alignItems: 'center',
         justifyContent: 'center',
+        width: '100%',
     },
     dropdownContainer: {
         flex: 4,
         justifyContent: 'space-evenly',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%'
     },
     image: {
         height: 200,
