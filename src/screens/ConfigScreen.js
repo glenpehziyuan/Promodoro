@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { GreyButton, DropdownMenu } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import { LoadingScreen } from './LoadingScreen';
+import LoadingScreen from './LoadingScreen';
 import Slider from '@react-native-community/slider';
 
 const DEFAULT_WORK_MINS = 25;

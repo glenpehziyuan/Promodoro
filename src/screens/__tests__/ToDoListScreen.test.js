@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react-native';
 import { ToDoListScreen } from '../index';
 
-describe("LoginScreen", () => {
+describe("ToDoListScreen", () => {
     beforeEach(() => {
         render(<ToDoListScreen />);
         const inputElement = screen.getByPlaceholderText(/Write a task/i)

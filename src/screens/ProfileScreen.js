@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { GreyButton } from '../components';
-import { LoadingScreen } from './LoadingScreen';
+import LoadingScreen from './LoadingScreen';
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState({});

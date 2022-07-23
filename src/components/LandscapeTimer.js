@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
-import { TimeDisplay } from './TimeDisplay';
-import { GreyButton } from './GreyButton';
+import TimeDisplay from './TimeDisplay';
+import GreyButton from './GreyButton';
 
 const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHandler, background }) => {
 
@@ -11,7 +11,7 @@ const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHa
                 style={styles.background}
                 resizeMode='cover'
                 source={
-                    {uri: background }
+                    {uri: background}
                 }
                 testID="background-image"
             >    
