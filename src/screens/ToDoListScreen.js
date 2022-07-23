@@ -16,6 +16,28 @@ import { Task, GreyButton } from '../components';
 const ToDoListScreen = ({ navigation }) => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
+        
+  const getToDoList = async () => {
+        try {
+
+            let output = [];
+            
+            const colRef = collection(db, "users");
+            const colSnap = await getDocs(colRef);
+
+            colSnap.docs.forEach((doc) => {
+                if (doc.data().uid === auth.currentUser.uid) {
+                    const usertoDoList = doc.data();
+                    output = usertoDoList["task"];
+                };
+            });
+
+            setTaskItems(output);
+
+        } catch {(err) => {
+            console.error("Error retrieving user task", err);
+        }};
+    };
 
   const handleAddTask = () => {
     Keyboard.dismiss();
