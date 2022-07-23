@@ -11,7 +11,7 @@ import {
   Platform 
 } from 'react-native';
 import { db, auth } from '../firebase';
-import { collection , onSnapshot } from 'firebase/firestore';
+import { collection , onSnapshot, updateDo, doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
@@ -50,11 +50,17 @@ const ToDoListScreen = ({ navigation }) => {
   }, [task]);
 
 
-  const handleAddTask = (e) => {
+  const handleAddTask = () => {
     Keyboard.dismiss();
-    e.preventDefault();
-    setTaskItems([...taskItems, task])
-    setTask(null);
+    const getuserId = collection(db,"users");
+    getuserId.docs.forEach((doc) => {
+      if (doc.data().uid = auth.currentUser.uid) {
+        const usertoDoList = doc.data()
+        await updateDoc(usertoDoList, {
+          tasks: arrayUnion(task)
+        });
+      }
+    })
   }
 
   const completeTask = (index) => {
