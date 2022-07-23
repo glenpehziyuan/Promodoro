@@ -125,17 +125,19 @@ const ConfigScreen = ({ navigation }) => {
         return (
             <View style={styles.container}>
                 <View style={styles.instructionsContainer}>
-                    <Text>How to use:</Text>
+                    <Text style={{textAlign: 'center'}}>How to use:</Text>
                     <Text style={styles.instructions}>1. Choose a background.</Text>
                     <Text style={styles.instructions}>2. Choose the no. of minutes you want to work and break respectively.</Text>
                     <Text style={styles.instructions}>2. Proceed.</Text>
                 </View>
 
-                <DropdownMenu 
-                    dataArray={dropdownData}
-                    onChange={setBackgroundLink}
-                    placeholder="Select background"
-                />
+                <View style={styles.dropdownContainer}>
+                    <DropdownMenu 
+                        dataArray={dropdownData}
+                        onChange={setBackgroundLink}
+                        placeholder="Select background"
+                    />
+                </View>
 
                 <View style={styles.slidersContainer}>
                     <Text>Work for {workMins} minutes</Text>
@@ -160,15 +162,17 @@ const ConfigScreen = ({ navigation }) => {
                     />
                 </View>
     
-                <GreyButton 
-                    pressHandler={() => proceedHandler()}
-                    title="Proceed"
-                />
-    
-                <GreyButton 
-                    pressHandler={() => navigation.popToTop()}
-                    title="Back to Home"
-                />
+                <View style={styles.buttonContainer}>
+                    <GreyButton 
+                        pressHandler={() => proceedHandler()}
+                        title="Proceed"
+                    />
+        
+                    <GreyButton 
+                        pressHandler={() => navigation.popToTop()}
+                        title="Back to Home"
+                    />
+                </View>
             </View>
         );
     };
@@ -178,7 +182,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FEFFE1'
     },
     button: {
         backgroundColor: '#dcdcdc',
@@ -187,23 +192,34 @@ const styles = StyleSheet.create({
         padding: 10
     },
     buttonContainer: {
-        flexDirection: 'row'
+        flex: 2,
+        justifyContent: 'center'
     },
     instructions:{
         fontSize: 12,
         padding: 5,
     },
     instructionsContainer: {
-        alignItems: 'center',
-        width: 300
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'flex-start',
+        width: '90%',
+        backgroundColor: '#E3FFFB',
+        padding: 20,
+        margin: 20
     },
     slider: {
         width: 250,
         height: 40
     },
     slidersContainer: {
+        flex: 2,
         margin: 20,
         alignItems: 'center'
+    },
+    dropdownContainer: {
+        flex: 2,
+        justifyContent: 'center'
     },
 });
 
