@@ -42,9 +42,12 @@ const ToDoListScreen = ({ navigation }) => {
 
   useEffect(() => {
     onSnapshot(collection(db, "users"),(snapshot)=>{
-      setTaskItems(snapshot.docs.map(doc => doc.data()))
-    })
-  }, [task])
+      snapshot.docs.forEach((doc) => {
+        if (doc.data().uid === auth.currentUser.uid) {
+            const usertoDoList = doc.data();
+            setTaskItems(usertoDoList["tasks"]);
+    }})});
+  }, [task]);
 
 
   const handleAddTask = (e) => {
