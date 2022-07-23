@@ -11,7 +11,7 @@ import {
   Platform 
 } from 'react-native';
 import { db, auth } from '../firebase';
-import { collection , onSnapshot, updateDo, doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection , onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, getDocs } from 'firebase/firestore';
 import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
@@ -50,17 +50,37 @@ const ToDoListScreen = ({ navigation }) => {
   }, [task]);
 
 
-  const handleAddTask = () => {
-    Keyboard.dismiss();
-    const getuserId = collection(db,"users");
-    getuserId.docs.forEach((doc) => {
-      if (doc.data().uid = auth.currentUser.uid) {
-        const usertoDoList = doc.data()
-        await updateDoc(usertoDoList, {
-          tasks: arrayUnion(task)
-        });
-      }
-    })
+  const handleAddTask = async () => {
+    try {
+      Keyboard.dismiss();
+      const colRef = collection(db,"users");
+      const colSnap = await getDocs(colRef);
+      
+      let docSnap = undefined;
+
+      colSnap.docs.forEach((doc) => {
+        if (doc.data().uid === auth.currentUser.uid) {
+          docSnap = doc;
+        }
+      });
+
+      //console.log("docsnap = ", docSnap)
+
+      const docRef = doc.getDocumentReference();
+
+      console.log("docref = ", docRef)
+
+      const resolve = await updateDoc(docRef, {
+        tasks: arrayUnion(task)
+      });
+
+      console.log(resolve)
+
+    } catch {(err) => {
+      console.error(err);
+    }}
+
+    getDocs
   }
 
   const completeTask = (index) => {
