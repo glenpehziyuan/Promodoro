@@ -13,6 +13,7 @@ import {
 import { db, auth } from '../firebase';
 import { collection , onSnapshot, updateDo, doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { Task, GreyButton } from '../components';
+import { async } from '@firebase/util';
 
 const ToDoListScreen = ({ navigation }) => {
   const [task, setTask] = useState();
@@ -28,7 +29,7 @@ const ToDoListScreen = ({ navigation }) => {
   }, [task]);
 
 
-  const handleAddTask = () => {
+  const handleAddTask = async() => {
     Keyboard.dismiss();
     const getuserId = collection(db,"users");
     getuserId.docs.forEach((doc) => {
@@ -41,10 +42,17 @@ const ToDoListScreen = ({ navigation }) => {
     })
   }
 
-  const completeTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy)
+  const completeTask = async(index) => {
+    const getuserId = collection(db,"users");
+    getuserId.docs.forEach((doc) => {
+      if (doc.data().uid = auth.currentUser.uid) {
+        const usertoDoList = doc.data()
+        task = usertoDoList[index];
+        await updateDoc(usertoDoList, {
+          tasks: arrayRemove(task)
+        });
+      }
+    })
   }
 
   return (
