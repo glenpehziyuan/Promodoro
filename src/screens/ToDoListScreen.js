@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { 
   KeyboardAvoidingView, 
   StyleSheet, 
@@ -10,7 +10,8 @@ import {
   ScrollView, 
   Platform 
 } from 'react-native';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
+import { collection , onSnapshot } from 'firebase/firestore';
 import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
@@ -39,8 +40,16 @@ const ToDoListScreen = ({ navigation }) => {
         }};
     };
 
-  const handleAddTask = () => {
+  useEffect(() => {
+    onSnapshot(collection(db, "users"),(snapshot)=>{
+      setTaskItems(snapshot.docs.map(doc => doc.data()))
+    })
+  }, [task])
+
+
+  const handleAddTask = (e) => {
     Keyboard.dismiss();
+    e.preventDefault();
     setTaskItems([...taskItems, task])
     setTask(null);
   }
@@ -101,7 +110,7 @@ const ToDoListScreen = ({ navigation }) => {
       
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
