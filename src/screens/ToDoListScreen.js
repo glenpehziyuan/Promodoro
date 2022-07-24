@@ -11,82 +11,104 @@ import {
   Platform 
 } from 'react-native';
 import { db, auth } from '../firebase';
-import { collection , onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, getDocs } from 'firebase/firestore';
+import { collection , onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, getDocs, getDoc } from 'firebase/firestore';
+import { DocumentSnapshot, DocumentReference } from 'firebase/firestore';
 import { Task, GreyButton } from '../components';
 
 const ToDoListScreen = ({ navigation }) => {
   const [task, setTask] = useState();
   const [taskItems, setTaskItems] = useState([]);
         
-  const getToDoList = async () => {
-        try {
-
-            let output = [];
-            
-            const colRef = collection(db, "users");
-            const colSnap = await getDocs(colRef);
-
-            colSnap.docs.forEach((doc) => {
-                if (doc.data().uid === auth.currentUser.uid) {
-                    const usertoDoList = doc.data();
-                    output = usertoDoList["task"];
-                };
-            });
-
-            setTaskItems(output);
-
-        } catch {(err) => {
-            console.error("Error retrieving user task", err);
-        }};
-    };
-
   useEffect(() => {
-    onSnapshot(collection(db, "users"),(snapshot)=>{
+    onSnapshot(collection(db, "users"), (snapshot) => {
       snapshot.docs.forEach((doc) => {
         if (doc.data().uid === auth.currentUser.uid) {
             const usertoDoList = doc.data();
             setTaskItems(usertoDoList["tasks"]);
-    }})});
+        }})
+    });
   }, [task]);
+  
+  // const getToDoList = async () => {
+  //       try {
+
+  //           let output = [];
+            
+  //           const colRef = collection(db, "users");
+  //           const colSnap = await getDocs(colRef);
+
+  //           colSnap.docs.forEach((doc) => {
+  //               if (doc.data().uid === auth.currentUser.uid) {
+  //                   const usertoDoList = doc.data();
+  //                   output = usertoDoList["task"];
+  //               };
+  //           });
+
+  //           setTaskItems(output);
+
+  //       } catch {(err) => {
+  //           console.error("Error retrieving user task", err);
+  //       }};
+  //   };
 
 
-  const handleAddTask = async () => {
-    try {
+  const handleAddTask = () => {
       Keyboard.dismiss();
+      const updateData = async () => {
+        try {
+          await addTaskHelper()
+        } catch {(err) => {
+          console.error(err); 
+        }}
+      }
+
+      updateData()
+        .catch((err) => {
+          console.error(err);
+        })
+  };
+
+  const addTaskHelper = async () => {
+    try {
+      console.log("running helper");
+
       const colRef = collection(db,"users");
       const colSnap = await getDocs(colRef);
       
-      let docSnap = undefined;
+      let docSnap = null;
 
       colSnap.docs.forEach((doc) => {
         if (doc.data().uid === auth.currentUser.uid) {
           docSnap = doc;
         }
-      });
+      })
+      console.log("docSnap data = ", docSnap.data());
 
-      //console.log("docsnap = ", docSnap)
+      const docRef = docSnap.exists();
+      //const docRef = docSnap.getReference();
 
-      const docRef = doc.getDocumentReference();
+      console.log("docref =", docRef)
+      const usertoDoList = docSnap.data()["tasks"]
 
-      console.log("docref = ", docRef)
+      console.log([...usertoDoList, "hi"])
 
-      const resolve = await updateDoc(docRef, {
-        tasks: arrayUnion(task)
-      });
+      //await updateDoc(docRef, {tasks: [...usertoDoList, "hi"]});
 
-      console.log(resolve)
+  } catch {(err) => {
+    console.error(err)
+  }}};
 
-    } catch {(err) => {
-      console.error(err);
-    }}
-
-    getDocs
-  }
-
-  const completeTask = (index) => {
-    let itemsCopy = [...taskItems];
-    itemsCopy.splice(index, 1);
-    setTaskItems(itemsCopy)
+  const completeTask = async (index) => {
+    // const getuserId = collection(db,"users");
+    // getuserId.docs.forEach((doc) => {
+    //   if (doc.data().uid = auth.currentUser.uid) {
+    //     const usertoDoList = doc.data()
+    //     task = usertoDoList[index];
+    //     await updateDoc(usertoDoList, {
+    //       tasks: arrayRemove(task)
+    //     });
+    //   }
+    // })
   }
 
   return (
