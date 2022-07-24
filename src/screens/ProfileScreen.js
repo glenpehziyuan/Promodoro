@@ -9,6 +9,7 @@ import { auth, db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { GreyButton } from '../components';
 import LoadingScreen from './LoadingScreen';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ProfileScreen = ({ navigation }) => {
     const [userData, setUserData] = useState({});
@@ -52,11 +53,10 @@ const ProfileScreen = ({ navigation }) => {
     } else {
         return (
             <View style={styles.container}>
-                <Image
-                    style={styles.displayPicture}
-                    source={
-                        {uri: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' }
-                    }
+
+                <Icon 
+                    name="plane"
+                    style={styles.icon}
                 />
                 
                 <View style={styles.textContainer}>
@@ -65,7 +65,7 @@ const ProfileScreen = ({ navigation }) => {
                         <Text style={styles.text}>Email address</Text>
                         <Text style={styles.text}>Miles</Text>
                         <Text style={styles.text}>Backgrounds</Text>
-                        <Text style={styles.text}>Productive time</Text>
+                        {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                     <View style={styles.textContainerRight}>
                         <Text style={styles.text}>{userData["username"]}</Text>
@@ -74,7 +74,7 @@ const ProfileScreen = ({ navigation }) => {
                         <Text style={styles.text}>
                             {userData["backgrounds"] ? userData["backgrounds"].length : 0}
                         </Text>
-                        <Text style={styles.text}>Productive time</Text>
+                        {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                 </View>
     
@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 50,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#FEFFE1'
     },
     displayPicture: {
         width: 150,
@@ -114,7 +115,11 @@ const styles = StyleSheet.create({
     },
     text: {
         marginBottom: 20,
+        fontSize: 16
     },
+    icon: {
+        fontSize: 128,
+    }
 });
 
 export default ProfileScreen;
