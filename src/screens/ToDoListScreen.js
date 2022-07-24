@@ -57,6 +57,10 @@ const ToDoListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+
+      <View style={styles.titleContainer}>
+        <Text style={styles.sectionTitle}>Today's tasks</Text>
+      </View>
       {/* Added this scroll view to enable scrolling when list gets longer than the page */}
       <ScrollView
         contentContainerStyle={{
@@ -67,7 +71,6 @@ const ToDoListScreen = ({ navigation }) => {
 
         {/* Today's Tasks */}
         <View style={styles.tasksWrapper}>
-          <Text style={styles.sectionTitle}>Today's tasks</Text>
           <View style={styles.items}>
             {/* This is where the tasks will go! */}
             {
@@ -98,10 +101,12 @@ const ToDoListScreen = ({ navigation }) => {
         </TouchableOpacity>
       </KeyboardAvoidingView>
 
-      <GreyButton 
-        pressHandler={() => navigation.popToTop()}
-        title="Back to Home"
-      />
+      <View style={styles.buttonContainer}>
+        <GreyButton 
+          pressHandler={() => navigation.popToTop()}
+          title="Back to Home"
+        />
+      </View>
       
     </View>
   );
@@ -110,10 +115,14 @@ const ToDoListScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8EAED',
+    backgroundColor: '#FEFFE1',
   },
+  titleContainer: {
+    paddingTop: 60,
+    paddingBottom: 20,
+    alignItems: 'center'
+  }, 
   tasksWrapper: {
-    paddingTop: 80,
     paddingHorizontal: 20,
   },
   sectionTitle: {
@@ -124,8 +133,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   writeTaskWrapper: {
-    position: 'absolute',
-    bottom: 60,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -136,21 +143,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     backgroundColor: '#FFF',
     borderRadius: 60,
-    borderColor: '#C0C0C0',
+    borderColor: '#55BCF6',
     borderWidth: 1,
     width: 250,
   },
   addWrapper: {
     width: 60,
     height: 60,
-    backgroundColor: '#FFF',
+    backgroundColor: '#E3FFFB',
     borderRadius: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#C0C0C0',
+    borderColor: '#55BCF6',
     borderWidth: 1,
   },
   addText: {},
+  buttonContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  }
 });
 
 export default ToDoListScreen;
