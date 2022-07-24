@@ -61,19 +61,21 @@ const ProfileScreen = ({ navigation }) => {
                 
                 <View style={styles.textContainer}>
                     <View style={styles.textContainerLeft}>
-                        <Text style={styles.text}>Username</Text>
-                        <Text style={styles.text}>Email address</Text>
-                        <Text style={styles.text}>Miles</Text>
-                        <Text style={styles.text}>Backgrounds</Text>
+                        <Text style={styles.label}>Username</Text>
+                        <Text style={styles.label}>Email address</Text>
+                        <Text style={styles.label}>Tasks</Text>
+                        {/* <Text style={styles.text}>Backgrounds</Text> */}
                         {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                     <View style={styles.textContainerRight}>
                         <Text style={styles.text}>{userData["username"]}</Text>
                         <Text style={styles.text}>{userData["email"]}</Text>
-                        <Text style={styles.text}>{userData["miles"]}</Text>
                         <Text style={styles.text}>
-                            {userData["backgrounds"] ? userData["backgrounds"].length : 0}
+                            {userData["tasks"] ? userData["tasks"].length : 0}
                         </Text>
+                        {/* <Text style={styles.text}>
+                            {userData["backgrounds"] ? userData["backgrounds"].length : 0}
+                        </Text> */}
                         {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                 </View>
@@ -112,6 +114,11 @@ const styles = StyleSheet.create({
     textContainerRight: {
         alignItems: 'flex-start',
         marginHorizontal: 10,
+    },
+    label: {
+        marginBottom: 20,
+        fontSize: 16,
+        fontStyle: 'italic'
     },
     text: {
         marginBottom: 20,
