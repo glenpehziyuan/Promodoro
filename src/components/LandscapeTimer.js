@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import TimeDisplay from './TimeDisplay';
 import GreyButton from './GreyButton';
+import ColouredButton from './ColouredButton';
 
 const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHandler, background }) => {
 
@@ -17,25 +18,31 @@ const LandscapeTimer = ({ isBreak, secsLeft, startHandler, pauseHandler, resetHa
             >    
                 <View style={styles.subContainer}>                  
                     <View style={styles.timerContainer}>
-                        <Text style={styles.text}>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
+                        <Text style={styles.text}>{`${isBreak ? "Break: " : "Work: "}`}</Text>
         
-                        <TimeDisplay seconds={isBreak ? secsLeft["break"] : secsLeft["work"]}/>
+                        <TimeDisplay 
+                            seconds={isBreak ? secsLeft["break"] : secsLeft["work"]}
+                            style={styles.display}
+                        />
                     </View>
         
                     <View style={styles.buttonContainer}>
-                        <GreyButton 
+                        <ColouredButton 
                             pressHandler={startHandler}
                             title="Start"
+                            colour="#D6FFD9"
                         />
         
-                        <GreyButton 
+                        <ColouredButton 
                             pressHandler={pauseHandler}
                             title="Pause"
+                            colour="#FBECE9"
                         />
         
-                        <GreyButton 
+                        <ColouredButton 
                             pressHandler={resetHandler}
                             title="Reset"
+                            colour="#E3FFFB"
                         />
                     </View>  
                 </View>
@@ -55,22 +62,37 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-end',
+        justifyContent: 'space-evenly',
+        height: "40%",
     },
     timerContainer: {
-        flex: 5,
+        flex: 3,
         flexDirection: 'row',
         margin: 20,
         alignSelf: 'flex-start',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     background: {
         flex: 1,
         justifyContent: 'center'
     },
     text: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: 'black',
         color: 'white',
-    }
+        paddingVertical: 5,
+        paddingLeft: 10
+    },
+    display: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: 'black',
+        color: 'white',
+        paddingVertical: 5,
+        paddingRight: 10
+    },
 });
 
 export default LandscapeTimer;
