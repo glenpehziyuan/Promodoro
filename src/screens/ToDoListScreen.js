@@ -30,29 +30,29 @@ const ToDoListScreen = ({ navigation }) => {
 
 
   const handleAddTask = async() => {
-    Keyboard.dismiss();
-    const getuserId = collection(db,"users");
-    getuserId.docs.forEach((doc) => {
-      if (doc.data().uid = auth.currentUser.uid) {
-        const usertoDoList = doc.data()
-        await updateDoc(usertoDoList, {
-          tasks: arrayUnion(task)
-        });
-      }
-    })
+    // Keyboard.dismiss();
+    // const getuserId = collection(db,"users");
+    // getuserId.docs.forEach((doc) => {
+    //   if (doc.data().uid = auth.currentUser.uid) {
+    //     const usertoDoList = doc.data()
+    //     await updateDoc(usertoDoList, {
+    //       tasks: arrayUnion(task)
+    //     });
+    //   }
+    // })
   }
 
   const completeTask = async(index) => {
-    const getuserId = collection(db,"users");
-    getuserId.docs.forEach((doc) => {
-      if (doc.data().uid = auth.currentUser.uid) {
-        const usertoDoList = doc.data()
-        task = usertoDoList[index];
-        await updateDoc(usertoDoList, {
-          tasks: arrayRemove(task)
-        });
-      }
-    })
+    // const getuserId = collection(db,"users");
+    // getuserId.docs.forEach((doc) => {
+    //   if (doc.data().uid = auth.currentUser.uid) {
+    //     const usertoDoList = doc.data()
+    //     task = usertoDoList[index];
+    //     await updateDoc(usertoDoList, {
+    //       tasks: arrayRemove(task)
+    //     });
+    //   }
+    // })
   }
 
   return (
