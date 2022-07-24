@@ -137,19 +137,35 @@ const TimerScreen = ({ route, navigation }) => {
     } else {
         return (
             <View style={styles.container}>
+
+                <View style={styles.instructionsContainer}>
+                    <Text style={styles.title}>How to use:</Text>
+                    <Text style={styles.instructions}>
+                        Control the timer with the buttons below, and rotate your screen for full-screen display.
+                    </Text>
+                    <Text style={styles.instructions}>
+                        Your Pomodoro interval: {`${configs["work"]}`} - {`${configs["break"]}`}
+                    </Text>
+                </View>
                 
-                <Image
-                    style={styles.background}
-                    source={
-                        {uri: configs["background"] }
-                    }
-                    testID="background-image"
-                />
+                <View style={styles.backgroudContainer}>
+                    <Image
+                        style={styles.background}
+                        source={
+                            {uri: configs["background"] }
+                        }
+                        testID="background-image"
+                    />
+                </View>
                 
                 <View style={styles.timerContainer}>
+
                     <Text>{`Time left for ${isBreak ? "Break: " : "Work: "}`}</Text>
     
-                    <TimeDisplay seconds={isBreak ? secsLeft.break : secsLeft.work}/>
+                    <TimeDisplay 
+                        seconds={isBreak ? secsLeft.break : secsLeft.work}
+                        style={styles.display}
+                    />
                 </View>
     
                 <View style={styles.buttonContainer}>
@@ -162,11 +178,13 @@ const TimerScreen = ({ route, navigation }) => {
                     <ColouredButton 
                         pressHandler={pauseHandler}
                         title="Pause"
+                        colour="#FBECE9"
                     />
     
                     <ColouredButton 
                         pressHandler={resetHandler}
                         title="Reset"
+                        colour="#E3FFFB"
                     />
                 </View>
     
@@ -183,25 +201,57 @@ const TimerScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#FEFFE1',
         paddingTop: 50
     },
+    title: {
+        marginBottom: 5,
+        alignSelf: 'center',
+        fontStyle: 'italic'
+    },  
+    instructions:{
+        fontSize: 12,
+        textAlign: 'justify'
+    },
+    instructionsContainer: {
+        flex: 1,
+        justifyContent: 'space-evenly',
+        width: '90%',
+        backgroundColor: '#E3FFFB',
+        padding: 20,
+        marginBottom: 30,
+        borderWidth: 2,
+        borderColor: '#D2E0F2',
+    },
+    backgroudContainer: {
+        flex: 3,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%'
+    }, 
     buttonContainer: {
         flex: 1,
         flexDirection: 'row'
     },
     timerContainer: {
-        flex: 2,
+        flex: 1,
         flexDirection: 'row',
-        margin: 20,
         alignItems: 'center'
     },
+    display: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        backgroundColor: 'black',
+        color: 'white',
+        paddingVertical: 5,
+        paddingHorizontal: 10
+    },
     background: {
-        flex: 3,
-        width: 300,
-        height: 200,
+        width: '90%',
+        height: '80%',
     },
 });
 

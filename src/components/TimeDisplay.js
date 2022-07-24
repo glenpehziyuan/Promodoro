@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 
 const SECS_IN_MIN = 60;
 
 // converts seconds to min : sec
-const TimeDisplay = ({ seconds }) => {
+const TimeDisplay = ({ seconds, style }) => {
     const mins = Math.floor(seconds / SECS_IN_MIN);
     const secs = Math.floor(seconds % SECS_IN_MIN);
 
@@ -13,20 +13,9 @@ const TimeDisplay = ({ seconds }) => {
 
     return (
         <View>
-            <Text style={styles.display}>{toDoubleDigits(mins)} : {toDoubleDigits(secs)}</Text>
+            <Text style={style}>{toDoubleDigits(mins)} : {toDoubleDigits(secs)}</Text>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    display: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        backgroundColor: 'black',
-        color: 'white',
-        paddingVertical: 5,
-        paddingHorizontal: 10
-    },
-})
 
 export default TimeDisplay;

@@ -189,15 +189,15 @@ const ConfigScreen = ({ navigation }) => {
     
                 <View style={styles.buttonContainer}>
                     <ColouredButton 
-                        pressHandler={() => proceedHandler()}
-                        title="Proceed"
-                        colour="#D6FFD9"
-                    />
-        
-                    <ColouredButton 
                         pressHandler={() => navigation.popToTop()}
                         title="Back to Home"
                         colour="#DCDCDC"
+                    />
+                    
+                    <ColouredButton 
+                        pressHandler={() => proceedHandler()}
+                        title="Proceed"
+                        colour="#D6FFD9"
                     />
                 </View>
             </View>
