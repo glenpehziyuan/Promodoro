@@ -1,6 +1,6 @@
 import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList } from 'react-native';
 import InlineTextButton from '../components/InlineTextButton';
-import AppStyles from '../components/AppStyles';
+import AppStyles from '../styles/AppStyles';
 import { auth, db } from "../firebase";
 import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore"; 
 import { sendEmailVerification } from 'firebase/auth';
@@ -131,6 +131,14 @@ export default function ToDo({ navigation }) {
       </Modal>
       <Text style={AppStyles.header}>ToDo</Text>
       {auth.currentUser.emailVerified ? showContent() : showSendVerificationEmail()}
+
+      <View style={styles.buttonContainer}>
+        <GreyButton 
+          pressHandler={() => navigation.popToTop()}
+          title="Back to Home"
+        />
+      </View>
+      
     </SafeAreaView>
   )
 }

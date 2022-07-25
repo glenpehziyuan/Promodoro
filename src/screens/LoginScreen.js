@@ -6,8 +6,9 @@ import {
     updateProfile,
 } from 'firebase/auth';
 import { auth } from '../firebase';
-import { LoginComponent, SignUpComponent } from '../components';
+import { ColouredButton, LoginComponent, SignUpComponent } from '../components';
 import { createNewUser } from '../utils';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const LoginScreen = ({ navigation }) => {
     const [isLogin, setIsLogin] = useState(true);
@@ -117,32 +118,56 @@ const LoginScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <Image
+            {/* <Image
                 style={styles.tinyLogo}
                 source={
                     {uri: 'https://www.magpierecruitment.com/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBM1d6RHc9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--be853a5e1c343a05cd60e57b554b8d68fe7a16c8/Productivity%20blog.png' }
                 }
-            />
+            /> */}
 
-            <Text style={styles.header}>Welcome!</Text>
-            
-            <Text style={styles.text}>You are currently {isLogin ? "logging in" : "signing up"}</Text>
-            
-            {textBoxes()}
-            
-            <TouchableHighlight 
-                style={styles.button}
-                onPress={() => setIsLogin(!isLogin)}
-            >
-                <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
-            </TouchableHighlight>
+            <View style={styles.centerpieceContainer}>
+                <Icon 
+                    name="plane"
+                    style={styles.icon}
+                />
 
-            <TouchableHighlight
-                style={styles.button}
-                onPress={() => isLogin ? logInHandler() : signUpHandler()}
-            >
-                <Text style={styles.text}>Proceed</Text>
-            </TouchableHighlight>
+                <Text style={styles.header}>Welcome!</Text>
+                
+                <Text style={styles.text}>You are currently {isLogin ? "logging in" : "signing up"}</Text>
+            </View>
+            
+            <View style={styles.textboxesContainer}>
+                {textBoxes()}
+            </View>
+            
+            <View style={styles.buttonsContainer}>
+                {/* <TouchableHighlight 
+                    style={styles.button}
+                    onPress={() => setIsLogin(!isLogin)}
+                >
+                    <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
+                </TouchableHighlight>
+
+                <TouchableHighlight
+                    style={styles.button}
+                    onPress={() => isLogin ? logInHandler() : signUpHandler()}
+                >
+                    <Text style={styles.text}>Proceed</Text>
+                </TouchableHighlight> */}
+
+                <ColouredButton 
+                    pressHandler={() => setIsLogin(!isLogin)}
+                    title={ `Switch to ${isLogin ? "Sign up" : "Log in"}` }
+                    colour="#E3FFFB"
+                />
+
+                <ColouredButton 
+                    pressHandler={() => isLogin ? logInHandler() : signUpHandler()}
+                    title="Proceed"
+                    colour="#D6FFD9"
+                />
+            </View>
+
         </View>
     )
 };
@@ -151,13 +176,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
         alignItems: 'center',
-        padding: 10
+        backgroundColor: '#FEFFE1',
+        paddingBottom: 70,
+        paddingTop: 30,
     },
     header: {
         fontWeight: 'bold',
@@ -170,6 +192,26 @@ const styles = StyleSheet.create({
     tinyLogo: {
         width: 150,
         height: 150,
+    },
+    icon: {
+        fontSize: 128,
+        margin: 20,
+    },
+    centerpieceContainer: {
+        flex: 4,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    textboxesContainer: {
+        flex: 2,
+        width: '100%',
+        alignItems: 'center',
+    },
+    buttonsContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        width: '90%',
     }
 });
 

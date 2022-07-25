@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput } from "react-native";
 const SignUpComponent = ( { emailState, setEmailState, passwordState, setPasswordState, nameState, setNameState } ) => {
 
     return (
-        <View>       
+        <View style={styles.container}>       
             <TextInput
                 style={styles.textBox}
                 value={emailState}
@@ -31,10 +31,16 @@ const SignUpComponent = ( { emailState, setEmailState, passwordState, setPasswor
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     textBox:{
-        marginBottom: 10,
+        margin: 10,
         borderBottomWidth: 1,
-        width: 200
+        width: '50%'
     },
 })
 
