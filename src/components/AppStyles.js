@@ -9,10 +9,11 @@ const AppStyles =  StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E3FFFB',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16
+    padding: 16,
+    margin: 20,
   },
   noPadding: {
     flex: 1,
