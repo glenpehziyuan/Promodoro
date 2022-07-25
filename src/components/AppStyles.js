@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export default StyleSheet.create({
+const AppStyles =  StyleSheet.create({
   imageContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -84,3 +84,5 @@ export default StyleSheet.create({
     opacity: 0.6
   }
 });
+
+export default AppStyles;

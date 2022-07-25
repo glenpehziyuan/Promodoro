@@ -1,5 +1,5 @@
 import { Text, Pressable } from 'react-native';
-import AppStyles from '../styles/AppStyles';
+import { AppStyles } from '../components';
 
 export default function InlineTextButton(props) {
   let style = {};

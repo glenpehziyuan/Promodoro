@@ -1,6 +1,6 @@
 import { View, Text, TextInput, Button } from 'react-native';
 import React from 'react';
-import AppStyles from '../styles/AppStyles';
+import { AppStyles } from '../components';
 
 export default function AddToDoModal(props) {
   let [todo, setTodo] = React.useState("");

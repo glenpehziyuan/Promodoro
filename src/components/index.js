@@ -7,3 +7,4 @@ export { default as DropdownMenu } from './DropdownMenu';
 export { default as LandscapeTimer } from './LandscapeTimer';
 export { default as ColouredButton } from './ColouredButton';
 export { default as Placeholder } from './Placeholder';
+export { default as AppStyles } from './AppStyles';
