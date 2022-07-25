@@ -1,9 +1,8 @@
-import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList } from 'react-native';
+import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
 import InlineTextButton from '../components/InlineTextButton';
-import { AppStyles } from '../components';
+import { AppStyles, GreyButton } from '../components';
 import { auth, db } from "../firebase";
 import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore"; 
-import { sendEmailVerification } from 'firebase/auth';
 import React from 'react';
 import AddToDoModal from '../components/AddToDoModal';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -24,7 +23,6 @@ export default function ToDoListScreen({ navigation }) {
       toDo.id = doc.id;
       toDos.push(toDo);
     });
-
     setToDos(toDos);
     setIsLoading(false);
     setIsRefreshing(false);
@@ -80,7 +78,7 @@ export default function ToDoListScreen({ navigation }) {
 
   let showContent = () => {
     return (
-      <View>
+      <View style={styles.contentContainer}>
         {isLoading ? <ActivityIndicator size="large" /> : showToDoList() }
         <Button 
           title="Add ToDo" 
@@ -90,14 +88,14 @@ export default function ToDoListScreen({ navigation }) {
     );
   };
 
-  let showSendVerificationEmail = () => {
-    return (
-      <View>
-        <Text>Please verify your email to use ToDo</Text>
-        <Button title="Send Verification Email" onPress={() => sendEmailVerification(auth.currentUser)} />
-      </View>
-    );
-  };
+  // let showSendVerificationEmail = () => {
+  //   return (
+  //     <View>
+  //       <Text>Please verify your email to use ToDo</Text>
+  //       <Button title="Send Verification Email" onPress={() => sendEmailVerification(auth.currentUser)} />
+  //     </View>
+  //   );
+  // };
 
   let addToDo = async (todo) => {
     let toDoToSave = {
@@ -116,29 +114,50 @@ export default function ToDoListScreen({ navigation }) {
   };
   
   return (
-    <SafeAreaView>
-      <View style={[AppStyles.rowContainer, AppStyles.rightAligned, AppStyles.rightMargin, AppStyles.topMargin]}>
+    <SafeAreaView style={styles.container}>
+      {/* <View style={[AppStyles.rowContainer, AppStyles.rightAligned, AppStyles.rightMargin, AppStyles.topMargin]}>
         <InlineTextButton text="Manage Account" color="#258ea6" onPress={() => navigation.navigate("ManageAccount")}/>
+      </View> */}
+      <View style={styles.subcontainer}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <AddToDoModal 
+            onClose={() => setModalVisible(false)}
+            addToDo={addToDo} />
+        </Modal>
+        <Text style={AppStyles.header}>ToDo</Text>
+        {showContent()}
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <AddToDoModal 
-          onClose={() => setModalVisible(false)}
-          addToDo={addToDo} />
-      </Modal>
-      <Text style={AppStyles.header}>ToDo</Text>
-      {auth.currentUser.emailVerified ? showContent() : showSendVerificationEmail()}
 
-      {/* <View style={styles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         <GreyButton 
           pressHandler={() => navigation.popToTop()}
           title="Back to Home"
         />
-      </View> */}
+      </View>
       
     </SafeAreaView>
   )
-}
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 50,
+    backgroundColor: "#FEFFE1",
+    width: '100%'
+  },
+  subcontainer: {
+    flex: 9,
+  },
+  contentContainer: {
+    marginVertical: 20,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  }
+})

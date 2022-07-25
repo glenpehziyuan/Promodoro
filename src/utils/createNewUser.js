@@ -10,9 +10,7 @@ const createNewUser = ({ uid, username, email }) => {
         uid: uid,
         username: username,
         email: email,
-        miles: 0,
         backgrounds: DEFAULT_BACKGROUNDS,
-        rooms: [],
         tasks: []
     })
     .then((docRef) => {
