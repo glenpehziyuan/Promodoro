@@ -1,212 +1,143 @@
-import React, {useEffect, useState} from 'react';
-import { 
-  KeyboardAvoidingView, 
-  StyleSheet, 
-  Text, 
-  View, 
-  TextInput, 
-  TouchableOpacity, 
-  Keyboard, 
-  ScrollView, 
-  Platform 
-} from 'react-native';
-import { db, auth } from '../firebase';
-import { collection , onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, getDocs, getDoc } from 'firebase/firestore';
-import { DocumentSnapshot, DocumentReference } from 'firebase/firestore';
-import { Task, GreyButton } from '../components';
+import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList } from 'react-native';
+import InlineTextButton from '../components/InlineTextButton';
+import { AppStyles } from '../components';
+import { auth, db } from "../firebase";
+import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore"; 
+import { sendEmailVerification } from 'firebase/auth';
+import React from 'react';
+import AddToDoModal from '../components/AddToDoModal';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-const ToDoListScreen = ({ navigation }) => {
-  const [task, setTask] = useState();
-  const [taskItems, setTaskItems] = useState([]);
-        
-  useEffect(() => {
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        if (doc.data().uid === auth.currentUser.uid) {
-            const usertoDoList = doc.data();
-            setTaskItems(usertoDoList["tasks"]);
-        }})
+export default function ToDoListScreen({ navigation }) {
+  let [modalVisible, setModalVisible] = React.useState(false);
+  let [isLoading, setIsLoading] = React.useState(true);
+  let [isRefreshing, setIsRefreshing] = React.useState(false);
+  let [toDos, setToDos] = React.useState([]);
+
+  let loadToDoList = async () => {
+    const q = query(collection(db, "todos"), where("userId", "==", auth.currentUser.uid));
+
+    const querySnapshot = await getDocs(q);
+    let toDos = [];
+    querySnapshot.forEach((doc) => {
+      let toDo = doc.data();
+      toDo.id = doc.id;
+      toDos.push(toDo);
     });
-  }, [task]);
-  
-  // const getToDoList = async () => {
-  //       try {
-
-  //           let output = [];
-            
-  //           const colRef = collection(db, "users");
-  //           const colSnap = await getDocs(colRef);
-
-  //           colSnap.docs.forEach((doc) => {
-  //               if (doc.data().uid === auth.currentUser.uid) {
-  //                   const usertoDoList = doc.data();
-  //                   output = usertoDoList["task"];
-  //               };
-  //           });
-
-  //           setTaskItems(output);
-
-  //       } catch {(err) => {
-  //           console.error("Error retrieving user task", err);
-  //       }};
-  //   };
-
-
-  const handleAddTask = () => {
-      Keyboard.dismiss();
-      const updateData = async () => {
-        try {
-          await addTaskHelper()
-        } catch {(err) => {
-          console.error(err); 
-        }}
-      }
-
-      updateData()
-        .catch((err) => {
-          console.error(err);
-        })
+    setToDos(toDos);
+    setIsLoading(false);
+    setIsRefreshing(false);
   };
 
-  const addTaskHelper = async () => {
-    try {
-      console.log("running helper");
-
-      const colRef = collection(db,"users");
-      const colSnap = await getDocs(colRef);
-      
-      let docSnap = null;
-
-      colSnap.docs.forEach((doc) => {
-        if (doc.data().uid === auth.currentUser.uid) {
-          docSnap = doc;
-        }
-      })
-      console.log("docSnap data = ", docSnap.data());
-
-      const docRef = docSnap.exists();
-      //const docRef = docSnap.getReference();
-
-      console.log("docref =", docRef)
-      const usertoDoList = docSnap.data()["tasks"]
-
-      console.log([...usertoDoList, "hi"])
-
-      //await updateDoc(docRef, {tasks: [...usertoDoList, "hi"]});
-
-  } catch {(err) => {
-    console.error(err)
-  }}};
-
-  const completeTask = async (index) => {
-    // const getuserId = collection(db,"users");
-    // getuserId.docs.forEach((doc) => {
-    //   if (doc.data().uid = auth.currentUser.uid) {
-    //     const usertoDoList = doc.data()
-    //     task = usertoDoList[index];
-    //     await updateDoc(usertoDoList, {
-    //       tasks: arrayRemove(task)
-    //     });
-    //   }
-    // })
+  if (isLoading) {
+    loadToDoList();
   }
 
-  return (
-    <View style={styles.container}>
-      {/* Added this scroll view to enable scrolling when list gets longer than the page */}
-      <ScrollView
-        contentContainerStyle={{
-          flexGrow: 1
-        }}
-        keyboardShouldPersistTaps='handled'
-      >
+  let checkToDoItem = (item, isChecked) => {
+    const toDoRef = doc(db, 'todos', item.id);
+    setDoc(toDoRef, { completed: isChecked }, { merge: true });
+  };
 
-        {/* Today's Tasks */}
-        <View style={styles.tasksWrapper}>
-          <Text style={styles.sectionTitle}>Today's tasks</Text>
-          <View style={styles.items}>
-            {/* This is where the tasks will go! */}
-            {
-              taskItems.map((item, index) => {
-                return (
-                  <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
-                    <Task text={item} /> 
-                  </TouchableOpacity>
-                )
-              })
-            }
-          </View>
+  let deleteToDo = async (toDoId) => {
+    await deleteDoc(doc(db, "todos", toDoId));
+    let updatedToDos = [...toDos].filter((item) => item.id != toDoId);
+    setToDos(updatedToDos);
+  };
+
+  let renderToDoItem = ({item}) => {
+    return (
+      <View style={[AppStyles.rowContainer, AppStyles.rightMargin, AppStyles.leftMargin]}>
+        <View style={AppStyles.fillSpace}>
+          <BouncyCheckbox
+            isChecked={item.complated}
+            size={25}
+            fillColor="#258ea6"
+            unfillColor="#FFFFFF"
+            text={item.text}
+            iconStyle={{ borderColor: "#258ea6" }}
+            onPress={(isChecked) => { checkToDoItem(item, isChecked)}}
+          />
         </View>
-        
-      </ScrollView>
+        <InlineTextButton text="Delete" color="#258ea6" onPress={() => deleteToDo(item.id)} />
+      </View>
+    );
+  }
 
-      {/* Write a task */}
-      {/* Uses a keyboard avoiding view which ensures the keyboard does not cover the items on screen */}
-      <KeyboardAvoidingView 
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.writeTaskWrapper}
-      >
-        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)} />
-        <TouchableOpacity onPress={() => handleAddTask()}>
-          <View style={styles.addWrapper}>
-            <Text style={styles.addText}>+</Text>
-          </View>
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
+  let showToDoList = () => {
+    return (
+      <FlatList
+        data={toDos}
+        refreshing={isRefreshing}
+        onRefresh={() => {
+          loadToDoList();
+          setIsRefreshing(true);
+        }}
+        renderItem={renderToDoItem}
+        keyExtractor={item => item.id} />
+    )
+  };
 
-      <GreyButton 
-        pressHandler={() => navigation.popToTop()}
-        title="Back to Home"
-      />
+  let showContent = () => {
+    return (
+      <View>
+        {isLoading ? <ActivityIndicator size="large" /> : showToDoList() }
+        <Button 
+          title="Add ToDo" 
+          onPress={() => setModalVisible(true)} 
+          color="#fb4d3d" />
+      </View>
+    );
+  };
+
+  let showSendVerificationEmail = () => {
+    return (
+      <View>
+        <Text>Please verify your email to use ToDo</Text>
+        <Button title="Send Verification Email" onPress={() => sendEmailVerification(auth.currentUser)} />
+      </View>
+    );
+  };
+
+  let addToDo = async (todo) => {
+    let toDoToSave = {
+      text: todo,
+      completed: false,
+      userId: auth.currentUser.uid
+    };
+    const docRef = await addDoc(collection(db, "todos"), toDoToSave);
+
+    toDoToSave.id = docRef.id;
+
+    let updatedToDos = [...toDos];
+    updatedToDos.push(toDoToSave);
+
+    setToDos(updatedToDos);
+  };
+  
+  return (
+    <SafeAreaView>
+      <View style={[AppStyles.rowContainer, AppStyles.rightAligned, AppStyles.rightMargin, AppStyles.topMargin]}>
+        <InlineTextButton text="Manage Account" color="#258ea6" onPress={() => navigation.navigate("ManageAccount")}/>
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}>
+        <AddToDoModal 
+          onClose={() => setModalVisible(false)}
+          addToDo={addToDo} />
+      </Modal>
+      <Text style={AppStyles.header}>ToDo</Text>
+      {auth.currentUser.emailVerified ? showContent() : showSendVerificationEmail()}
+
+      {/* <View style={styles.buttonContainer}>
+        <GreyButton 
+          pressHandler={() => navigation.popToTop()}
+          title="Back to Home"
+        />
+      </View> */}
       
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E8EAED',
-  },
-  tasksWrapper: {
-    paddingTop: 80,
-    paddingHorizontal: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold'
-  },
-  items: {
-    marginTop: 30,
-  },
-  writeTaskWrapper: {
-    position: 'absolute',
-    bottom: 60,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
-  },
-  input: {
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    backgroundColor: '#FFF',
-    borderRadius: 60,
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
-    width: 250,
-  },
-  addWrapper: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#FFF',
-    borderRadius: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#C0C0C0',
-    borderWidth: 1,
-  },
-  addText: {},
-});
-
-export default ToDoListScreen;
+    </SafeAreaView>
+  )
+}

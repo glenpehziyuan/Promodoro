@@ -3,16 +3,14 @@
 import { db } from '../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
-const DEFAULT_BACKGROUNDS = ["cafe", "aurora"];
+const DEFAULT_BACKGROUNDS = ["cafe", "aurora", "library", "newyork", "rainforest", "rain", "sakura"];
 
 const createNewUser = ({ uid, username, email }) => {
     addDoc(collection(db, "users"), {
         uid: uid,
         username: username,
         email: email,
-        miles: 0,
         backgrounds: DEFAULT_BACKGROUNDS,
-        rooms: [],
         tasks: []
     })
     .then((docRef) => {

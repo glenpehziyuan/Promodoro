@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
-import { GreyButton, DropdownMenu } from '../components';
+import { View, Text, StyleSheet, Alert, Image } from 'react-native';
+import { GreyButton, DropdownMenu, ColouredButton, Placeholder } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import LoadingScreen from './LoadingScreen';
@@ -117,6 +117,29 @@ const ConfigScreen = ({ navigation }) => {
         navigation.navigate("Timer", {...params});
     };
 
+    // changes between placeholder and selected background image
+    const display = () => {
+        if (backgroundLink === "") {
+            return (
+                <Placeholder 
+                    width="80%"
+                    height="60%"
+                    placeholderText="No background selected"
+                />
+            )
+        } else {
+            return (
+                <Image 
+                style={styles.image}    
+                source={
+                        {uri: backgroundLink}
+                    }
+                />
+            )
+        }
+    }
+
+
     if (dropdownData === []) {
         return (
             <LoadingScreen />
@@ -125,17 +148,21 @@ const ConfigScreen = ({ navigation }) => {
         return (
             <View style={styles.container}>
                 <View style={styles.instructionsContainer}>
-                    <Text>How to use:</Text>
-                    <Text style={styles.instructions}>1. Choose a background.</Text>
-                    <Text style={styles.instructions}>2. Choose the no. of minutes you want to work and break respectively.</Text>
-                    <Text style={styles.instructions}>2. Proceed.</Text>
+                    <Text style={styles.title}>How to use:</Text>
+                    <Text style={styles.instructions}>
+                        Choose a background, as well as the no. of minutes you want to work and break respectively.
+                    </Text>
                 </View>
 
-                <DropdownMenu 
-                    dataArray={dropdownData}
-                    onChange={setBackgroundLink}
-                    placeholder="Select background"
-                />
+                <View style={styles.dropdownContainer}>
+                    {display()}
+                    
+                    <DropdownMenu 
+                        dataArray={dropdownData}
+                        onChange={setBackgroundLink}
+                        placeholder="Select background"
+                    />
+                </View>
 
                 <View style={styles.slidersContainer}>
                     <Text>Work for {workMins} minutes</Text>
@@ -160,15 +187,19 @@ const ConfigScreen = ({ navigation }) => {
                     />
                 </View>
     
-                <GreyButton 
-                    pressHandler={() => proceedHandler()}
-                    title="Proceed"
-                />
-    
-                <GreyButton 
-                    pressHandler={() => navigation.popToTop()}
-                    title="Back to Home"
-                />
+                <View style={styles.buttonContainer}>
+                    <ColouredButton 
+                        pressHandler={() => navigation.popToTop()}
+                        title="Back to Home"
+                        colour="#DCDCDC"
+                    />
+                    
+                    <ColouredButton 
+                        pressHandler={() => proceedHandler()}
+                        title="Proceed"
+                        colour="#D6FFD9"
+                    />
+                </View>
             </View>
         );
     };
@@ -178,33 +209,55 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        backgroundColor: '#dcdcdc',
-        margin: 10,
         alignItems: 'center',
-        padding: 10
+        backgroundColor: '#FEFFE1',
+        paddingTop: 50
     },
     buttonContainer: {
-        flexDirection: 'row'
+        flex: 2,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
+    title: {
+        marginBottom: 5,
+        alignSelf: 'center',
+        fontStyle: 'italic'
+    },  
     instructions:{
         fontSize: 12,
-        padding: 5,
+        textAlign: 'justify'
     },
     instructionsContainer: {
-        alignItems: 'center',
-        width: 300
+        flex: 1,
+        justifyContent: 'space-evenly',
+        width: '90%',
+        backgroundColor: '#E3FFFB',
+        padding: 20,
+        marginBottom: 30,
+        borderWidth: 2,
+        borderColor: '#D2E0F2',
     },
     slider: {
-        width: 250,
-        height: 40
+        width: '70%',
+        height: 40,
     },
     slidersContainer: {
+        flex: 2,
         margin: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
     },
+    dropdownContainer: {
+        flex: 4,
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        width: '100%'
+    },
+    image: {
+        height: 200,
+        width: 300,
+    }
 });
 
 export default ConfigScreen;
