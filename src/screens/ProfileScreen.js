@@ -63,16 +63,16 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.textContainerLeft}>
                         <Text style={styles.label}>Username</Text>
                         <Text style={styles.label}>Email address</Text>
-                        <Text style={styles.label}>Tasks</Text>
+                        {/* <Text style={styles.label}>Tasks</Text> */}
                         {/* <Text style={styles.text}>Backgrounds</Text> */}
                         {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                     <View style={styles.textContainerRight}>
                         <Text style={styles.text}>{userData["username"]}</Text>
                         <Text style={styles.text}>{userData["email"]}</Text>
-                        <Text style={styles.text}>
+                        {/* <Text style={styles.text}>
                             {userData["tasks"] ? userData["tasks"].length : 0}
-                        </Text>
+                        </Text> */}
                         {/* <Text style={styles.text}>
                             {userData["backgrounds"] ? userData["backgrounds"].length : 0}
                         </Text> */}
