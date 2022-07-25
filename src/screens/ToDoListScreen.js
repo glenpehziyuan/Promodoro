@@ -1,6 +1,6 @@
 import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList } from 'react-native';
 import InlineTextButton from '../components/InlineTextButton';
-import AppStyles from '../styles/AppStyles';
+import AppStyles from '../components/AppStyles';
 import { auth, db } from "../firebase";
 import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore"; 
 import { sendEmailVerification } from 'firebase/auth';
