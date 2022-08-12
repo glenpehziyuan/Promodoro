@@ -1,18 +1,21 @@
 import { View, Text, TextInput, Button } from 'react-native';
-import React from 'react';
-import { AppStyles } from '../components';
+import { useState } from 'react';
+import { toDoListStyles } from '../utils';
 
-export default function AddToDoModal(props) {
-  let [todo, setTodo] = React.useState("");
+const AddToDoModal = (props) => {
+  let [todo, setTodo] = useState("");
+  
   return (
-    <View style={AppStyles.container}>
-      <Text style={AppStyles.header}>Add ToDo</Text>
+    <View style={toDoListStyles.container}>
+      <Text style={toDoListStyles.header}>Add ToDo</Text>
       <TextInput 
-          style={[AppStyles.textInput, AppStyles.darkTextInput]} 
+          style={[toDoListStyles.textInput, toDoListStyles.darkTextInput]} 
           placeholder='ToDo'
           value={todo}
           onChangeText={setTodo} />
-      <View style={[AppStyles.rowContainer, AppStyles.rightAligned, AppStyles.rightMargin]}>
+      <View style={
+        [toDoListStyles.rowContainer, toDoListStyles.rightAligned, toDoListStyles.rightMargin]
+      }>
         <Button title="Cancel" onPress={props.onClose} />
         <Button title="OK" onPress={() => {
           props.addToDo(todo);
@@ -22,4 +25,6 @@ export default function AddToDoModal(props) {
       </View>
     </View>
   );
-}
+};
+
+export default AddToDoModal;

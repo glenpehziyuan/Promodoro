@@ -1,5 +1,5 @@
 import { Text, Pressable } from 'react-native';
-import { AppStyles } from '../components';
+import { toDoListStyles } from '../utils';
 
 export default function InlineTextButton(props) {
   let style = {};
@@ -10,7 +10,10 @@ export default function InlineTextButton(props) {
     <Pressable onPress={props.onPress}>
       {({ pressed }) => (
         <Text 
-          style={[pressed ? AppStyles.pressedInlineTextButton : AppStyles.inlineTextButton, style]}>
+          style={
+            [pressed ? toDoListStyles.pressedInlineTextButton : toDoListStyles.inlineTextButton, style]
+          }
+        >
             {props.text}
         </Text>
       )}

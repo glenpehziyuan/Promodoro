@@ -1,22 +1,22 @@
-import { View, Button, Text, Modal, SafeAreaView, ActivityIndicator, FlatList, StyleSheet } from 'react-native';
-import InlineTextButton from '../components/InlineTextButton';
-import { AppStyles, GreyButton } from '../components';
+import { View, Button, Text, Modal, SafeAreaView, FlatList, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import { GreyButton, InlineTextButton, AddToDoModal } from '../components';
+import { toDoListStyles } from '../utils';
+import LoadingScreen from './LoadingScreen';
 import { auth, db } from "../firebase";
 import { collection, addDoc, query, where, getDocs, deleteDoc, doc, setDoc } from "firebase/firestore"; 
-import React from 'react';
-import AddToDoModal from '../components/AddToDoModal';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
-export default function ToDoListScreen({ navigation }) {
-  let [modalVisible, setModalVisible] = React.useState(false);
-  let [isLoading, setIsLoading] = React.useState(true);
-  let [isRefreshing, setIsRefreshing] = React.useState(false);
-  let [toDos, setToDos] = React.useState([]);
+const ToDoListScreen = ({ navigation }) => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [toDos, setToDos] = useState([]);
 
-  let loadToDoList = async () => {
-    const q = query(collection(db, "todos"), where("userId", "==", auth.currentUser.uid));
+  const loadToDoList = async () => {
+    const docQuery = query(collection(db, "todos"), where("userId", "==", auth.currentUser.uid));
 
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(docQuery);
     let toDos = [];
     querySnapshot.forEach((doc) => {
       let toDo = doc.data();
@@ -32,21 +32,23 @@ export default function ToDoListScreen({ navigation }) {
     loadToDoList();
   }
 
-  let checkToDoItem = (item, isChecked) => {
+  const checkToDoItem = (item, isChecked) => {
     const toDoRef = doc(db, 'todos', item.id);
     setDoc(toDoRef, { completed: isChecked }, { merge: true });
   };
 
-  let deleteToDo = async (toDoId) => {
+  const deleteToDo = async (toDoId) => {
     await deleteDoc(doc(db, "todos", toDoId));
     let updatedToDos = [...toDos].filter((item) => item.id != toDoId);
     setToDos(updatedToDos);
   };
 
-  let renderToDoItem = ({item}) => {
+  const renderToDoItem = ({item}) => {
     return (
-      <View style={[AppStyles.rowContainer, AppStyles.rightMargin, AppStyles.leftMargin]}>
-        <View style={AppStyles.fillSpace}>
+      <View style={
+        [toDoListStyles.rowContainer, toDoListStyles.rightMargin, toDoListStyles.leftMargin]
+      }>
+        <View style={toDoListStyles.fillSpace}>
           <BouncyCheckbox
             isChecked={item.complated}
             size={25}
@@ -57,12 +59,18 @@ export default function ToDoListScreen({ navigation }) {
             onPress={(isChecked) => { checkToDoItem(item, isChecked)}}
           />
         </View>
-        <InlineTextButton text="Delete" color="#258ea6" onPress={() => deleteToDo(item.id)} />
+        
+        <InlineTextButton 
+          text="Delete" 
+          color="#258ea6" 
+          onPress={() => deleteToDo(item.id)} 
+        />
+
       </View>
     );
   }
 
-  let showToDoList = () => {
+  const showToDoList = () => {
     return (
       <FlatList
         data={toDos}
@@ -72,32 +80,26 @@ export default function ToDoListScreen({ navigation }) {
           setIsRefreshing(true);
         }}
         renderItem={renderToDoItem}
-        keyExtractor={item => item.id} />
+        keyExtractor={item => item.id} 
+      />
     )
   };
 
-  let showContent = () => {
+  const showContent = () => {
     return (
       <View style={styles.contentContainer}>
-        {isLoading ? <ActivityIndicator size="large" /> : showToDoList() }
+        {/* {isLoading ? <ActivityIndicator size="large" /> : showToDoList() } */}
+        { showToDoList() }
         <Button 
           title="Add ToDo" 
           onPress={() => setModalVisible(true)} 
-          color="#fb4d3d" />
+          color="#fb4d3d" 
+        />
       </View>
     );
   };
 
-  // let showSendVerificationEmail = () => {
-  //   return (
-  //     <View>
-  //       <Text>Please verify your email to use ToDo</Text>
-  //       <Button title="Send Verification Email" onPress={() => sendEmailVerification(auth.currentUser)} />
-  //     </View>
-  //   );
-  // };
-
-  let addToDo = async (todo) => {
+  const addToDo = async (todo) => {
     let toDoToSave = {
       text: todo,
       completed: false,
@@ -113,34 +115,38 @@ export default function ToDoListScreen({ navigation }) {
     setToDos(updatedToDos);
   };
   
-  return (
-    <SafeAreaView style={styles.container}>
-      {/* <View style={[AppStyles.rowContainer, AppStyles.rightAligned, AppStyles.rightMargin, AppStyles.topMargin]}>
-        <InlineTextButton text="Manage Account" color="#258ea6" onPress={() => navigation.navigate("ManageAccount")}/>
-      </View> */}
-      <View style={styles.subcontainer}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => setModalVisible(false)}>
-          <AddToDoModal 
-            onClose={() => setModalVisible(false)}
-            addToDo={addToDo} />
-        </Modal>
-        <Text style={AppStyles.header}>ToDo</Text>
-        {showContent()}
-      </View>
+  if (isLoading) {
+    return (
+      <LoadingScreen />
+    )
+  } else {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.subcontainer}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}>
+            <AddToDoModal 
+              onClose={() => setModalVisible(false)}
+              addToDo={addToDo} 
+            />
+          </Modal>
+          <Text style={toDoListStyles.header}>To-Do List</Text>
+          {showContent()}
+        </View>
 
-      <View style={styles.buttonContainer}>
-        <GreyButton 
-          pressHandler={() => navigation.popToTop()}
-          title="Back to Home"
-        />
-      </View>
-      
-    </SafeAreaView>
-  )
+        <View style={styles.buttonContainer}>
+          <GreyButton 
+            pressHandler={() => navigation.popToTop()}
+            title="Back to Home"
+          />
+        </View>
+        
+      </SafeAreaView>
+    )
+    }
 };
 
 const styles = StyleSheet.create({
@@ -160,4 +166,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
   }
-})
+});
+
+export default ToDoListScreen;

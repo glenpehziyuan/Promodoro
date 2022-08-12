@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const AppStyles =  StyleSheet.create({
+const toDoListStyles =  StyleSheet.create({
   imageContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -86,4 +86,4 @@ const AppStyles =  StyleSheet.create({
   }
 });
 
-export default AppStyles;
+export default toDoListStyles;

@@ -2,7 +2,6 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    Image 
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
@@ -28,8 +27,6 @@ const ProfileScreen = ({ navigation }) => {
     // retrieves the user's data from the database, based on the uid
     const getUserData = async () => {
         try {
-            console.log("getting user data");
-            
             let output = {};
             
             const colRef = collection(db, "users");
@@ -63,20 +60,10 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.textContainerLeft}>
                         <Text style={styles.label}>Username</Text>
                         <Text style={styles.label}>Email address</Text>
-                        {/* <Text style={styles.label}>Tasks</Text> */}
-                        {/* <Text style={styles.text}>Backgrounds</Text> */}
-                        {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                     <View style={styles.textContainerRight}>
                         <Text style={styles.text}>{userData["username"]}</Text>
                         <Text style={styles.text}>{userData["email"]}</Text>
-                        {/* <Text style={styles.text}>
-                            {userData["tasks"] ? userData["tasks"].length : 0}
-                        </Text> */}
-                        {/* <Text style={styles.text}>
-                            {userData["backgrounds"] ? userData["backgrounds"].length : 0}
-                        </Text> */}
-                        {/* <Text style={styles.text}>Productive time</Text> */}
                     </View>
                 </View>
     
