@@ -17,9 +17,6 @@ const MainStack = createNativeStackNavigator();
 const AppNavigator = () => {
     const [user, setUser] = useState(null); 
 
-    // may need to add a hook to delay rendering until Firebase loads,
-    // as the app always tries to render LoginScreen first when user is null
-
     useEffect(() => {
         const subscriber = onAuthStateChanged(auth, authUser => {
             if (authUser) {

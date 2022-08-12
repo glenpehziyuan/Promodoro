@@ -88,7 +88,6 @@ const ToDoListScreen = ({ navigation }) => {
   const showContent = () => {
     return (
       <View style={styles.contentContainer}>
-        {/* {isLoading ? <ActivityIndicator size="large" /> : showToDoList() } */}
         { showToDoList() }
         <Button 
           title="Add ToDo" 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert, Image } from 'react-native';
-import { GreyButton, DropdownMenu, ColouredButton, Placeholder } from '../components';
+import { DropdownMenu, ColouredButton, Placeholder } from '../components';
 import { db, auth } from '../firebase';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import LoadingScreen from './LoadingScreen';

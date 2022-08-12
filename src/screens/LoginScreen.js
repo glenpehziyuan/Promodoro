@@ -141,20 +141,6 @@ const LoginScreen = ({ navigation }) => {
             </View>
             
             <View style={styles.buttonsContainer}>
-                {/* <TouchableHighlight 
-                    style={styles.button}
-                    onPress={() => setIsLogin(!isLogin)}
-                >
-                    <Text style={styles.text}>{ `Switch to ${isLogin ? "Sign up" : "Log in"}` }</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight
-                    style={styles.button}
-                    onPress={() => isLogin ? logInHandler() : signUpHandler()}
-                >
-                    <Text style={styles.text}>Proceed</Text>
-                </TouchableHighlight> */}
-
                 <ColouredButton 
                     pressHandler={() => setIsLogin(!isLogin)}
                     title={ `Switch to ${isLogin ? "Sign up" : "Log in"}` }
